@@ -60,8 +60,8 @@ export default function Example() {
   const renderContent = () => {
     switch (selectedItem) {
       case 'Overview':
-        return <Pricing />;
-        // return <Tables />;
+        // return <Pricing />;
+        return <Tables />;
       case 'Product':
         return <SalesOrder/>;
       case 'Settings':

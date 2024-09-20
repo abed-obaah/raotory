@@ -5,6 +5,7 @@ import { CheckCircleIcon } from '@heroicons/react/20/solid';
 
 export default function Example() {
   const [orders, setOrders] = useState([]);
+  const [orderTotals, setOrderTotals] = useState({});
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -13,6 +14,7 @@ export default function Example() {
         const data = await response.json();
         if (data.success) {
           setOrders(data.orders);
+          setOrderTotals(data.order_totals);
         } else {
           console.error('Failed to fetch orders:', data.message);
         }
@@ -29,7 +31,7 @@ export default function Example() {
       <div className="py-16 sm:py-24 -mt-20">
         <div className="mx-auto max-w-7xl sm:px-2 lg:px-8">
           <div className="mx-auto max-w-2xl px-4 lg:max-w-4xl lg:px-0">
-            <h2 className="text-lg font-bold tracking-tight text-gray-900 sm:text-xl">Latest order</h2>
+            <h2 className="text-lg font-bold tracking-tight text-gray-900 sm:text-xl">Latest Orders</h2>
           </div>
         </div>
 
@@ -51,6 +53,12 @@ export default function Example() {
                       <div>
                         <dt className="font-medium text-gray-900">Order number</dt>
                         <dd className="mt-1 text-gray-500">{order.order_no}</dd>
+                      </div>
+                      <div>
+                        <dt className="font-medium text-gray-900">Total</dt>
+                        <dd className="mt-1 text-gray-500">
+                          NGN {orderTotals[order.order_no] || 'N/A'}
+                        </dd>
                       </div>
                     </dl>
 
@@ -91,8 +99,8 @@ export default function Example() {
                       <p
                         className="flex items-center justify-center rounded-md bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       >
-                        <span>NGN{order.total}</span>
-                        <span className="sr-only">NGN{order.total}</span>
+                        <span>NGN {orderTotals[order.order_no] || 'N/A'}</span>
+                        <span className="sr-only">NGN {orderTotals[order.order_no] || 'N/A'}</span>
                       </p>
                     </div>
                   </div>
