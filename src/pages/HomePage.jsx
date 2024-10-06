@@ -23,10 +23,10 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
-  
+
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon,MoonIcon } from '@heroicons/react/20/solid'
-import  Tables from '../components/Tables'
+import { ChevronDownIcon, MagnifyingGlassIcon, MoonIcon } from '@heroicons/react/20/solid'
+import Tables from '../components/Tables'
 // import { HomeIcon, UsersIcon, FolderIcon, CalendarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import SalesOrder from '../components/SalesOrder';
 import StockDrugs from '../components/StockDrugs';
@@ -36,11 +36,11 @@ import logo from '../assets/Frame.svg';
 import { Field, Label, Switch } from '@headlessui/react'
 
 const navigation = [
-    { name: 'Overview', href: '#', icon: HomeIcon, current: true },
-    { name: 'Product', href: '#', icon: UsersIcon, current: false },
-    { name: 'Settings', href: '#', icon: FolderIcon, current: false },
-    { name: 'Help center', href: '#', icon: CalendarIcon, current: false },
-  ];
+  { name: 'Overview', href: '#', icon: HomeIcon, current: true },
+  { name: 'Product', href: '#', icon: UsersIcon, current: false },
+  { name: 'Settings', href: '#', icon: FolderIcon, current: false },
+  { name: 'Help center', href: '#', icon: CalendarIcon, current: false },
+];
 
 
 const userNavigation = [
@@ -60,14 +60,14 @@ export default function Example() {
   const renderContent = () => {
     switch (selectedItem) {
       case 'Overview':
-        // return <Pricing />;
-        return <Tables />;
+        return <Pricing />;
+      // return <Tables />;
       case 'Product':
-        return <SalesOrder/>;
+        return <SalesOrder />;
       case 'Settings':
-        return <StockDrugs/>;
+        return <StockDrugs />;
       case 'Help center':
-        return <Reports/>;
+        return <Reports />;
       default:
         return <Pricing />;
     }
@@ -75,7 +75,7 @@ export default function Example() {
 
   return (
     <>
-     
+
       <div>
         <Dialog open={sidebarOpen} onClose={setSidebarOpen} className="relative z-50 lg:hidden">
           <DialogBackdrop
@@ -104,35 +104,35 @@ export default function Example() {
                     src={logo}
                     className="h-8 w-auto"
                   />
-                   {/* <h1 className="text-[24px] font-inter font-bold leading-[29.05px] text-[#008C38]">RAOTory</h1> */}
+                  {/* <h1 className="text-[24px] font-inter font-bold leading-[29.05px] text-[#008C38]">RAOTory</h1> */}
                 </div>
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
                       <ul role="list" className="-mx-2 space-y-1">
-                      {navigation.map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          onClick={() => setSelectedItem(item.name)}
-                          className={classNames(
-                            item.name === selectedItem
-                              ? 'bg-[#E5FFF0] text-[#444444]'
-                              : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
-                            'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-                          )}
-                        >
-                          <item.icon
-                            aria-hidden="true"
-                            className={classNames(
-                              item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
-                              'h-6 w-6 shrink-0',
-                            )}
-                          />
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
+                        {navigation.map((item) => (
+                          <li key={item.name}>
+                            <a
+                              href={item.href}
+                              onClick={() => setSelectedItem(item.name)}
+                              className={classNames(
+                                item.name === selectedItem
+                                  ? 'bg-[#E5FFF0] text-[#444444]'
+                                  : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
+                                'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                              )}
+                            >
+                              <item.icon
+                                aria-hidden="true"
+                                className={classNames(
+                                  item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
+                                  'h-6 w-6 shrink-0',
+                                )}
+                              />
+                              {item.name}
+                            </a>
+                          </li>
+                        ))}
                       </ul>
                     </li>
                     <li className="mt-auto">
@@ -158,20 +158,20 @@ export default function Example() {
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
-          <div className="flex h-16 shrink-0 items-center py-20">
-                <img
-                  alt="Your Company"
-                  src={logo}
-                  className="h-6 w-auto" // Reduced size to h-6
-                />
-                {/* <h1 className="text-[24px] font-inter font-bold leading-[29.05px] text-[#008C38]">RAOTory</h1> */}
-              </div>
+            <div className="flex h-16 shrink-0 items-center py-20">
+              <img
+                alt="Your Company"
+                src={logo}
+                className="h-6 w-auto" // Reduced size to h-6
+              />
+              {/* <h1 className="text-[24px] font-inter font-bold leading-[29.05px] text-[#008C38]">RAOTory</h1> */}
+            </div>
 
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                  {navigation.map((item) => (
+                    {navigation.map((item) => (
                       <li key={item.name}>
                         <a
                           href={item.href}
@@ -195,43 +195,43 @@ export default function Example() {
                       </li>
                     ))}
                   </ul>
-                  
+
                 </li>
                 <li className="mt-auto">
-                <Field className="-mx-2 flex items-center justify-between rounded-lg bg-gray-50 px-2 py-3 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                  <div className="flex items-center">
-                    <MoonIcon
-                      aria-hidden="true"
-                      className="h-6 w-6 shrink-0 text-[#001B2A] group-hover:text-indigo-600"
-                    />
-                    <Label as="span" className="ml-10 text-sm">
-                      <span className="font-medium text-gray-900">Dark Mode</span>
-                    </Label>
-                  </div>
-                  <Switch
-                    checked={enabled}
-                    onChange={setEnabled}
-                    className="group relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#9CA0B2] transition-colors duration-200 ease-in-out data-[checked]:bg-indigo-600"
+                  <Field className="-mx-2 flex items-center justify-between rounded-lg bg-gray-50 px-2 py-3 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                    <div className="flex items-center">
+                      <MoonIcon
+                        aria-hidden="true"
+                        className="h-6 w-6 shrink-0 text-[#001B2A] group-hover:text-indigo-600"
+                      />
+                      <Label as="span" className="ml-10 text-sm">
+                        <span className="font-medium text-gray-900">Dark Mode</span>
+                      </Label>
+                    </div>
+                    <Switch
+                      checked={enabled}
+                      onChange={setEnabled}
+                      className="group relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#9CA0B2] transition-colors duration-200 ease-in-out data-[checked]:bg-indigo-600"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out group-data-[checked]:translate-x-4"
+                      />
+                    </Switch>
+                  </Field>
+
+
+                  <a
+                    href="#"
+                    className="group mt-5 -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-[#CA0000] hover:bg-gray-50 hover:text-indigo-600"
                   >
-                    <span
+                    <Cog6ToothIcon
                       aria-hidden="true"
-                      className="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out group-data-[checked]:translate-x-4"
+                      className="h-6 w-6 shrink-0 text-[#CA0000] group-hover:text-indigo-600"
                     />
-                  </Switch>
-                </Field>
-
-
-                      <a
-                        href="#"
-                        className="group mt-5 -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-[#CA0000] hover:bg-gray-50 hover:text-indigo-600"
-                      >
-                        <Cog6ToothIcon
-                          aria-hidden="true"
-                          className="h-6 w-6 shrink-0 text-[#CA0000] group-hover:text-indigo-600"
-                        />
-                        Logout
-                      </a>
-                    </li>
+                    Logout
+                  </a>
+                </li>
               </ul>
             </nav>
           </div>

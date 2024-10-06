@@ -8,8 +8,8 @@ export default {
     extend: {
       fontSize: {
         '24px': '24px',
-        '20px':'20px',
-        '14px':'14px'
+        '20px': '20px',
+        '14px': '14px'
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
@@ -18,6 +18,9 @@ export default {
         'custom': '29.05px',
         '24.2px': '24.2px',
       },
+      colors: {
+        customColor: "#001B2A"
+      }
     },
   },
   plugins: [],

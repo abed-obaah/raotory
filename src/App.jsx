@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signin from './pages/RegistrationPage';
-import OTP from './pages/EmailVerificationPage'
+import OTP from './pages/EmailVerificationPage';
 import Dashboard from './pages/HomePage';
 import Login from './pages/LoginPage';
 import ForgetPassword from './pages/forgetPassword';
-import PasswordResetOtp from './pages/passwordResetOtp'
+import PasswordResetOtp from './pages/passwordResetOtp';
+import InputOrder from './pages/Overview'
 // import AdminDashboard from './screens/admin/index'
 // import Jobs from './screens/Jobs'
 // import UserManagement from './screens/admin/userManagement'
@@ -48,14 +49,15 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/"  element={<Signin />} />
+        <Route path="/" element={<Signin />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path='login' element={<Login/>}/>
-        <Route path='/forgetPassword' element={<ForgetPassword/>}/>
-        <Route path='/passwordResetOtp' element={<PasswordResetOtp/>}/>
-        {/* <Route path="/adminDashboard" element={<AdminDashboard/>} />
-        <Route path="/jobs" element={<Jobs />} />
+        <Route path='login' element={<Login />} />
+        <Route path='/forgetPassword' element={<ForgetPassword />} />
+        <Route path='/passwordResetOtp' element={<PasswordResetOtp />} />
+        <Route path='/inputOrder' element={<InputOrder />} />
+        {/* <Route path="/adminDashboard" element={<AdminDashboard />} /> */}
+        {/* <Route path="/jobs" element={<Jobs />} />
         <Route path='/certification' element={<Certification/>} />
         <Route path="/admin-jobs" element={<Adminjobs />} />
         <Route path="/manage-user" element={<UserManagement />} />
@@ -81,7 +83,7 @@ export default function App() {
         <Route path='/viewChecklist' element={<ViewChecklist />}/>
         <Route path='/CheckList' element={<CheckList/>}/>
         <Route path='/pending-jobs' element={<PendingJobs/>}/> */}
-         {/* inspectionChecklist */}
+        {/* inspectionChecklist */}
       </Routes>
     </Router>
   );
