@@ -219,7 +219,7 @@ export default function Example() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.retail_price}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.wholesale_price}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <TrashIcon 
+                        <TrashIcon
                           className="w-5 h-5 cursor-pointer text-red-500 hover:text-red-700"
                           onClick={() => openItemConfirmModal(person.id)}
                         />
