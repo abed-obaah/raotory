@@ -23,15 +23,16 @@ import logo from '../assets/Frame.svg';
 import InputOrder from '../components/overviewComponents/input order/inputOrder';
 import Customer from '../components/overviewComponents/Create Customer/createCustomer';
 import Stock from '../components/overviewComponents/stock/stock';
-import Reports from '../components/Reports';
+import Settings from '../components/overviewComponents/settings/settings';
 import Inventory from '../components/overviewComponents/Inventory/inventory';
-import Invoice from '../components/overviewComponents/Invoice/invoice'
+import Invoice from '../components/overviewComponents/Invoice/invoice';
+import User from '../components/overviewComponents/settings/user'
 const navigation = [
     { name: 'Input Order', href: '#', icon: HomeIcon },
     { name: 'Create Customer', href: '#', icon: UsersIcon },
     { name: 'Products', href: '#', icon: FolderIcon },
     { name: 'Invoice', href: '#', icon: CalendarIcon },
-    { name: 'Settings', href: '#', icon: CalendarIcon },
+    { name: 'Settings', href: '#', icon: Cog6ToothIcon },
     { name: 'Help Center', href: '#', icon: CalendarIcon },
 ];
 
@@ -43,6 +44,7 @@ export default function Example() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Input Order');
     const [productsOpen, setProductsOpen] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(false);
     const [enabled, setEnabled] = useState(false);
 
     const renderContent = () => {
@@ -51,14 +53,18 @@ export default function Example() {
                 return <InputOrder />;
             case 'Create Customer':
                 return <Customer />;
-            case 'Products':
-                setSelectedItem('Stock Products');
             case 'Stock Products':
                 return <Stock />;
             case 'Invoice':
                 return <Invoice />;
             case 'Inventory':
-                return <Inventory />
+                return <Inventory />;
+            case 'Settings':
+                setSelectedItem('General Settings')
+            case 'General Settings':
+                return <Settings />;
+            case 'Users':
+                return <User />;
             default:
                 return <InputOrder />;
         }
@@ -66,7 +72,14 @@ export default function Example() {
 
     const handleProductClick = () => {
         setProductsOpen(prev => !prev);
+        setSettingsOpen(false); // Close Settings submenu
         setSelectedItem('Products');
+    };
+
+    const handleSettingsClick = () => {
+        setSettingsOpen(prev => !prev);
+        setProductsOpen(false); // Close Products submenu
+        setSelectedItem('Settings');
     };
 
     return (
@@ -100,7 +113,7 @@ export default function Example() {
                                                     <li key={item.name}>
                                                         <a
                                                             href={item.href}
-                                                            onClick={item.name === 'Products' ? handleProductClick : () => setSelectedItem(item.name)}
+                                                            onClick={item.name === 'Products' ? handleProductClick : item.name === 'Settings' ? handleSettingsClick : () => setSelectedItem(item.name)}
                                                             className={classNames(
                                                                 item.name === selectedItem
                                                                     ? 'bg-[#E5FFF0] text-[#444444]'
@@ -148,6 +161,29 @@ export default function Example() {
                                                                 </li>
                                                             </ul>
                                                         )}
+                                                        {item.name === 'Settings' && settingsOpen && (
+                                                            <ul className="pl-8 mt-2 space-y-1">
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('General Settings')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        General
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('Users')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        Users
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        )}
                                                     </li>
                                                 ))}
                                             </ul>
@@ -186,7 +222,7 @@ export default function Example() {
                                             <li key={item.name}>
                                                 <a
                                                     href={item.href}
-                                                    onClick={item.name === 'Products' ? handleProductClick : () => setSelectedItem(item.name)}
+                                                    onClick={item.name === 'Products' ? handleProductClick : item.name === 'Settings' ? handleSettingsClick : () => setSelectedItem(item.name)}
                                                     className={classNames(
                                                         item.name === selectedItem
                                                             ? 'bg-[#E5FFF0] text-[#444444]'
@@ -204,12 +240,12 @@ export default function Example() {
                                                     {item.name}
                                                 </a>
                                                 {item.name === 'Products' && productsOpen && (
-                                                    <ul className="pl-8 mt-2">
+                                                    <ul className="pl-8 mt-2 space-y-1">
                                                         <li>
                                                             <a
                                                                 href="#"
                                                                 onClick={() => setSelectedItem('Stock Products')}
-                                                                className="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded"
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
                                                             >
                                                                 Stock Products
                                                             </a>
@@ -232,6 +268,29 @@ export default function Example() {
                                                                 Inventory
                                                             </a>
                                                         </li>
+                                                    </ul>
+                                                )}
+                                                {item.name === 'Settings' && settingsOpen && (
+                                                    <ul className="pl-8 mt-2 space-y-1">
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('General Settings')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                General
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('Users')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                Users
+                                                            </a>
+                                                        </li>
+
                                                     </ul>
                                                 )}
                                             </li>
