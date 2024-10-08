@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Table from './TableComp'
 import { Tab } from "@headlessui/react";
-import VectorBG from '/Vector 18.svg'
+import VectorBG from '../../../../src/assets/Vector 18.svg'
 
 const inputOrder = () => {
     const [tab, setTab] = useState('input');

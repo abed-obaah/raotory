@@ -24,7 +24,8 @@ import InputOrder from '../components/overviewComponents/input order/inputOrder'
 import Customer from '../components/overviewComponents/Create Customer/createCustomer';
 import Stock from '../components/overviewComponents/stock/stock';
 import Reports from '../components/Reports';
-import Inventory from '../components/overviewComponents/Inventory/inventory'
+import Inventory from '../components/overviewComponents/Inventory/inventory';
+import Invoice from '../components/overviewComponents/Invoice/invoice'
 const navigation = [
     { name: 'Input Order', href: '#', icon: HomeIcon },
     { name: 'Create Customer', href: '#', icon: UsersIcon },
@@ -54,8 +55,8 @@ export default function Example() {
                 setSelectedItem('Stock Products');
             case 'Stock Products':
                 return <Stock />;
-            case 'Help Center':
-                return <Reports />;
+            case 'Invoice':
+                return <Invoice />;
             case 'Inventory':
                 return <Inventory />
             default:

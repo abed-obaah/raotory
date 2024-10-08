@@ -1,5 +1,6 @@
 import { collapseClasses } from "@mui/material";
 import React from "react";
+import { TrashIcon } from '@heroicons/react/24/solid';
 
 const Table = () => {
     const customers = [
@@ -73,7 +74,7 @@ const Table = () => {
                             <div className="btns flex w-1/2">
 
                                 <button className="bg-blue-500 p-1 text-white w-full rounded-lg ml-5">Modify</button>
-                                <button className="h-7 w-10 bg-red-300 ml-5 rounded-full"></button>
+                                <div className="bg-red-200 p-2 ml-5 rounded-full"><TrashIcon className="w-5 h-5 cursor-pointer text-red-500 hover:text-red-700" /></div>
                             </div>
                         </td>
                     </tr>
