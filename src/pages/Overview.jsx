@@ -17,7 +17,13 @@ import {
     UsersIcon,
     XMarkIcon,
     ChartPieIcon,
-    MoonIcon
+    MoonIcon,
+    ShoppingCartIcon,
+    UserCircleIcon,
+    NewspaperIcon,
+    QuestionMarkCircleIcon,
+    ClipboardDocumentCheckIcon,
+    ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import logo from '../assets/Frame.svg';
 import InputOrder from '../components/overviewComponents/input order/inputOrder';
@@ -28,12 +34,12 @@ import Inventory from '../components/overviewComponents/Inventory/inventory';
 import Invoice from '../components/overviewComponents/Invoice/invoice';
 import User from '../components/overviewComponents/settings/user'
 const navigation = [
-    { name: 'Input Order', href: '#', icon: HomeIcon },
-    { name: 'Create Customer', href: '#', icon: UsersIcon },
-    { name: 'Products', href: '#', icon: FolderIcon },
-    { name: 'Invoice', href: '#', icon: CalendarIcon },
+    { name: 'Input Order', href: '#', icon: ShoppingCartIcon },
+    { name: 'Create Customer', href: '#', icon: UserCircleIcon },
+    { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon },
+    { name: 'Invoice', href: '#', icon: NewspaperIcon },
     { name: 'Settings', href: '#', icon: Cog6ToothIcon },
-    { name: 'Help Center', href: '#', icon: CalendarIcon },
+    { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon },
 ];
 
 function classNames(...classes) {
@@ -345,11 +351,8 @@ export default function Example() {
                         <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                             <h2 className="relative flex flex-1 leading-[24.05px] top-4 text-[20px]">{selectedItem}</h2>
                             <div className="absolute right-4 top-3 flex flex-1 items-center">
-                                <button className="relative flex flex1 border items-center mx-3 px-5 h-9 rounded-lg border-gray-200">Pharmacy 001
-                                    <ChartPieIcon
-                                        aria-hidden="true"
-                                        className="h-4 w-4 ml-2 shrink-0 text-[blue] group-hover:text-indigo-600"
-                                    />
+                                <button className="relative flex flex1 gap-2 border items-center mx-3 px-5 h-9 rounded-lg border-gray-200">Pharmacy 001
+                                    <ArrowPathIcon color="blue" height='20px' />
                                 </button>
                                 <button className="relative flex flex1 items-center border items-center mx-3 px-7 h-9 rounded-lg border-gray-200"><BellIcon
                                     aria-hidden="true"

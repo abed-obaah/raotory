@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { TrashIcon } from "@heroicons/react/24/outline";
 const CreateTable = ({ tab }) => {
     const initialTableInfo = [
         {
@@ -100,7 +100,10 @@ const CreateTable = ({ tab }) => {
                                     )}
                                 </td>
 
-                                <td className="border p-3">NGN{item.SellPrice * item.Quantity}</td>
+                                {tab === 'input' ? <td className="border p-3 flex justify-between">NGN{item.SellPrice * item.Quantity}
+                                    <div className="bg-red-300 p-2 rounded-full"><TrashIcon height='20px' color="red" /></div></td> : <td className="border p-3 flex justify-between">NGN{item.SellPrice * item.Quantity}
+                                </td>}
+
                             </tr>
                         )
                     })}
@@ -110,7 +113,7 @@ const CreateTable = ({ tab }) => {
                     </tr>}
                 </tbody>
 
-            </table>
+            </table >
         </>
     )
 }

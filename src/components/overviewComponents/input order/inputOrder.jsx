@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Table from './TableComp'
 import { Tab } from "@headlessui/react";
+
 import VectorBG from '../../../../src/assets/Vector 18.svg'
 
 const inputOrder = () => {
