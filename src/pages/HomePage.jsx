@@ -27,6 +27,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon, MoonIcon } from '@heroicons/react/20/solid'
 import Tables from '../components/Tables'
+import  OverView from '../components/OverView'
 // import { HomeIcon, UsersIcon, FolderIcon, CalendarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import SalesOrder from '../components/SalesOrder';
 import StockDrugs from '../components/StockDrugs';
@@ -60,8 +61,9 @@ export default function Example() {
   const renderContent = () => {
     switch (selectedItem) {
       case 'Overview':
-        return <Pricing />;
+        // return <Pricing />;
       // return <Tables />;
+      return <OverView />;
       case 'Product':
         return <SalesOrder />;
       case 'Settings':
