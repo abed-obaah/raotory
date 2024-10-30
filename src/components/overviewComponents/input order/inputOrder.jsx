@@ -130,21 +130,21 @@ export default function Example() {
   return (
     <div>
       {/* Use a standard <label> element instead of <Label /> */}
-      <label className="block text-sm font-medium text-gray-900">Search Drugs</label>
+      <label className="block font-medium text-gray-900">Search Drugs</label>
 
       <input
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search..."
-        className="mt-2 mb-2 w-full rounded-md border border-gray-300 py-1.5 px-3 text-sm focus:ring-indigo-600 focus:border-indigo-600"
+        className="mt-2 mb-2 w-full h-[3.25rem] rounded-md border border-gray-300 py-1.5 px-3  focus:ring-indigo-600 focus:border-indigo-600"
       />
 
       {error && <div className="text-red-500">{error}</div>} {/* Display error if there's any */}
 
       <Listbox value={selected} onChange={setSelected}>
-        <div className="relative mt-1">
-          <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm">
+        <div className="relative mt-1 ">
+          <ListboxButton className="relative w-full h-[3.25rem] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 ">
             <span className="block truncate">{selected ? selected.name : 'Select a customer'}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronUpDownIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
@@ -199,7 +199,7 @@ export default function Example() {
             list="suggestions"
             placeholder="Search products..."
             onChange={handleProductSelection}
-            className="mt-2 mb-2 w-full rounded-md border border-gray-300 py-1.5 px-3 text-sm focus:ring-indigo-600 focus:border-indigo-600"
+             className="h-5 border p-7 w-[224px] rounded-lg"
           />
         </div>
 
@@ -221,7 +221,7 @@ export default function Example() {
 
         <button
           onClick={handleAddProduct}
-          className="mt-2 mb-2 bg-green-500 text-white py-1 px-3 rounded"
+          className="mb-2 bg-[#0E90DA] text-white py-0.5 px-3 rounded"
         >
           Add Product
         </button>

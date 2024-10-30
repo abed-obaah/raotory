@@ -8,7 +8,7 @@ import ChartBarComponent from './ChartBarComponent';
 import InvoiceTable from './InvoiceTable';
 import Chart from './Chart';
 import { useAuth } from '../context/AuthContext'; // Import the useAuth hook
-// import { useAuth } from '../'; // Import the useAuth hook
+
 
 export default function Example() {
   const { user } = useAuth(); // Get user from AuthContext
@@ -21,39 +21,39 @@ export default function Example() {
   const [totalProductsSold, setTotalProductsSold] = useState('0'); // New state for total products sold
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch sales, profit, and total products sold data when the component mounts
-  useEffect(() => {
-    if (!userEmail) {
-      console.error('User email is required to fetch sales data');
-      return;
-    }
 
+  useEffect(() => {
     const fetchSalesData = async () => {
       try {
         const response = await fetch(`https://raotory.com.ng/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}`);
         const data = await response.json();
-        console.log(response)
-
+        
+        console.log(data); // Log the entire response data for debugging
+    
         if (data.success) {
           setSalesCount(data.total_sales_count); // Update the sales count
           setTodaySales(`NGN ${parseFloat(data.total_sales_today).toFixed(2)}`); // Update today’s sale, formatted as currency
           
-          // Calculate total profits made
+          // Calculate total profits made from the profits array
           const totalProfits = data.profits.reduce((total, profit) => total + profit.profit_made, 0);
           setProfitMade(`NGN ${totalProfits.toFixed(2)}`); // Update profit made
           
           // Set total products sold if available
           setTotalProductsSold(data.total_products_sold || '0'); // Assuming your API returns this value
+        } else {
+          console.error('Failed to fetch sales data:', data.error); // Log the error message if the API call was not successful
         }
       } catch (err) {
-        console.error('Error fetching sales data:', err);
+        console.error('Error fetching sales data:', err); // Catch any other errors that occur during the fetch
       } finally {
         setIsLoading(false); // Set loading to false once fetch is done
       }
     };
 
-    fetchSalesData();
-  }, [userEmail]); // Dependency on userEmail
+    if (userEmail) {
+      fetchSalesData(); // Call the function to fetch sales data if userEmail is available
+    }
+  }, [userEmail]);
 
   const handleCardClick = (component) => {
     setSelectedComponent(() => component);
