@@ -3,10 +3,20 @@ import React from "react";
 const InvoiceTable = () => {
   const invoices = [
     { id: "#WUAS859", customer: "Jeremiah Omonefe", date: "5/09/2024", amount: "NGN 30,000", status: "Delivered" },
-    { id: "#WUAS859", customer: "Jeremiah Omonefe", date: "5/09/2024", amount: "NGN 30,000", status: "In progress" },
-    { id: "#WUAS859", customer: "Jeremiah Omonefe", date: "5/09/2024", amount: "NGN 30,000", status: "Delivered" },
-    { id: "#WUAS859", customer: "Jeremiah Omonefe", date: "5/09/2024", amount: "NGN 30,000", status: "Returned" },
-    { id: "#WUAS859", customer: "Jeremiah Omonefe", date: "5/09/2024", amount: "NGN 30,000", status: "Returned" },
+    { id: "#WUAS860", customer: "John Doe", date: "5/09/2024", amount: "NGN 20,000", status: "In progress" },
+    { id: "#WUAS861", customer: "Jane Smith", date: "5/09/2024", amount: "NGN 15,000", status: "Delivered" },
+    { id: "#WUAS862", customer: "Bob Johnson", date: "5/09/2024", amount: "NGN 40,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
+    { id: "#WUAS863", customer: "Alice Brown", date: "5/09/2024", amount: "NGN 25,000", status: "Returned" },
   ];
 
   const stockAlert = [
@@ -34,16 +44,16 @@ const InvoiceTable = () => {
     <div className="p-6">
       <div className="flex gap-10">
         {/* Recent Invoices */}
-        <div className=" w-1/2 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+        <div className="w-1/2 min-h-[800px] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"> {/* Increase height here */}
           <h2 className="text-lg font-semibold mb-4 py-2 px-2">Recent Invoices</h2>
           <table className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-50">
               <tr className="bg-gray-100">
-              <th scope="col" className="py-3.5 pl-4 pr-3 text-left  text-xs font-semibold text-gray-900 sm:pl-6">Invoice ID</th>
-                <th scope="col" className="px-3 py-3.5 text-left  text-xs font-semibold text-gray-900">Customer</th>
-                <th scope="col" className="px-3 py-3.5 text-left  text-xs font-semibold text-gray-900">Sales date</th>
+                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 sm:pl-6">Invoice ID</th>
+                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-gray-900">Customer</th>
+                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-gray-900">Sales date</th>
                 <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-gray-900">Paid amount</th>
-                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6  text-xs">Sales status</th>
+                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 text-xs">Sales status</th>
               </tr>
             </thead>
             <tbody>
@@ -65,7 +75,7 @@ const InvoiceTable = () => {
         </div>
 
         {/* Stock Alert */}
-        <div className="p-4  w-1/2 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+        <div className="p-4 w-1/2 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
           <h2 className="text-lg font-semibold mb-4">Stock Alert</h2>
           <table className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-50">

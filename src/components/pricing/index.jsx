@@ -1,9 +1,7 @@
-'use client';
-
 import { useState } from 'react';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/20/solid';
-import Payment from '../payment/index';
+import Payment from '../payment/index'; // Assuming you might need this component in the future
 import SingleStore from '../stores/singleStore';
 import MultiStore from '../stores/multiStore';
 
@@ -16,7 +14,7 @@ const tiers = [
   {
     name: 'Single store',
     id: 'SingleStore',
-    price: { monthly: '$15', annually: 'NGN 50,000' },
+    price: { monthly: 'NGN 5,000', annually: 'NGN 60,000' },
     description: 'Select this option if your business has just one location',
     features: ['One store', 'Unlimited orders daily', 'Can add team'],
     mostPopular: false,
@@ -24,7 +22,7 @@ const tiers = [
   {
     name: 'Multi stores',
     id: 'MultiStore',
-    price: { monthly: '$30', annually: 'NGN 80,000' },
+    price: { monthly: 'NGN 15,000', annually: 'NGN 180,000' },
     description: 'Select this option if your business has different locations',
     features: ['Up to 5 stores', 'Unlimited orders daily', 'Can add team'],
     mostPopular: false,
@@ -36,19 +34,21 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-  const [frequency, setFrequency] = useState(frequencies[1]);
-  const [selectedTier, setSelectedTier] = useState(tiers[0]);
+  const [frequency, setFrequency] = useState(frequencies[1]); // Default to annually
+  const [selectedTier, setSelectedTier] = useState(tiers[0]); // Default to SingleStore
   const [selectedComponent, setSelectedComponent] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(''); // State for selected price
 
   const handleButtonClick = (tier) => {
     setSelectedComponent(tier.id); // Set the component based on the tier's id
+    setSelectedPrice(tier.price[frequency.value]); // Set the selected price based on frequency
   };
 
   return (
     <div className="bg-white py-4 sm:py-4">
       {/* Conditionally render components based on selectedComponent */}
-      {selectedComponent === 'SingleStore' && <SingleStore />}
-      {selectedComponent === 'MultiStore' && <MultiStore />}
+      {selectedComponent === 'SingleStore' && <SingleStore price={selectedPrice} />}
+      {selectedComponent === 'MultiStore' && <MultiStore price={selectedPrice} />}
       {!selectedComponent && (
         <div>
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -110,7 +110,7 @@ export default function Example() {
                   <p className="mt-4 text-sm leading-6 text-gray-600">{tier.description}</p>
                   <p className="-mt-3 flex items-baseline gap-x-1 -mb-20">
                     <span className="text-4xl font-bold tracking-tight text-gray-900">
-                      {tier.price[frequency.value]}
+                      {tier.price[frequency.value]} {/* Display price based on selected frequency */}
                     </span>
                     <span className="text-sm font-semibold leading-6 text-gray-600">
                       {frequency.priceSuffix}

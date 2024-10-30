@@ -40,11 +40,12 @@ function NewComponent() {
   );
 }
 
-export default function Example() {
+export default function Example({ price }) {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [steps, setSteps] = useState(initialSteps);
   const [isFlowComplete, setIsFlowComplete] = useState(false);
+  
 
   const isButtonActive = selectedNumber !== null;
 
@@ -90,6 +91,7 @@ export default function Example() {
       ) : (
         <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-10 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-10">
+          Selected Amount: {price}
             <p className="mt-2 text-2xl font-regular tracking-tight text-gray-900 sm:text-4xl">
               Multi stores
             </p>

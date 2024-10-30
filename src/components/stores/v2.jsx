@@ -70,44 +70,21 @@ const Donate = ({ price }) => {
   const componentProps = {
     email,
     amount: amount * 100, // Ensure amount is in kobo
+    metadata: { name, phone, store, location },
     publicKey,
     text: "Pay Now",
-    onSuccess: async () => {
-      // Call the PHP script to store the payment information
-      const response = await fetch('https://raotory.com.ng/apis/store_payment.php', { // Update with your PHP script path
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          email,
-          store_name: storeName,
-          location,
-          number_of_items: numberOfItems,
-        }), // Send additional data as form data
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        alert(data.message); // Notify the user
-        setIsPaymentSuccessful(true); // Set payment success state
-      } else {
-        alert(data.message || 'An error occurred.');
-      }
+    onSuccess: () => {
+      alert("Thanks for donating!");
+      setIsPaymentSuccessful(true); // Set payment success state
     },
-    onClose: () => alert("You need to complete your payment!"),
+    onClose: () => {
+      alert("You need to complete your payment!")
+      setIsPaymentSuccessful(true); // Set payment success state
+    },
   };
 
   if (isPaymentSuccessful) {
-    return (
-      <NewComponent 
-        price={price} 
-        email={email} 
-        storeName={storeName} 
-        location={location} 
-        numberOfItems={numberOfItems} 
-      />
-    );
+    return <NewComponent price={price} email={email} />;
   }
 
   return (

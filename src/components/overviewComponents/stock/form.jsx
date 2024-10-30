@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import SelectedProducts from './selected';
+import { useAuth } from '../../../context/AuthContext';
+import axios from "axios";
 
 const Form = () => {
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         productName: '',
         quantity: '',
@@ -9,8 +12,11 @@ const Form = () => {
         retailPrice: '',
         wholesalePrice: '',
         batchNumber: '',
-        expirationDate: ''
+        expirationDate: '',
+        userEmail: user?.email || ""
     });
+
+    const [selectedProducts, setSelectedProducts] = useState([]); // List of selected products
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -22,8 +28,50 @@ const Form = () => {
 
     const allFieldsFilled = Object.values(formData).every(value => value !== '');
 
+    const handleAddProduct = () => {
+        if (allFieldsFilled) {
+            setSelectedProducts(prevProducts => [...prevProducts, formData]);
+
+            // Reset form after adding product
+            setFormData({
+                productName: '',
+                quantity: '',
+                purchasePrice: '',
+                retailPrice: '',
+                wholesalePrice: '',
+                batchNumber: '',
+                expirationDate: '',
+                userEmail: user?.email || ""
+            });
+        } else {
+            alert("Please fill out all fields before adding the product.");
+        }
+    };
+
+    const handleStockUp = async () => {
+        if (selectedProducts.length === 0) {
+            alert("No products added yet.");
+            return;
+        }
+    
+        console.log("test of selected products:",selectedProducts); // Debugging line
+    
+        try {
+            // Adjusted API endpoint and request payload
+            const response = await axios.post("https://raotory.com.ng/apis/addDrug.php", { drugs: selectedProducts });
+            console.log(response.data);
+            alert(response.data.message || "Products successfully stocked up!");
+    
+            // Clear selected products after successful submission
+            setSelectedProducts([]);
+        } catch (error) {
+            console.error("There was an error adding the drugs!", error);
+            alert("There was an error submitting the products.");
+        }
+    };
+    
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-20">
             <form className="w-2/3">
                 <input
                     type="text"
@@ -87,18 +135,18 @@ const Form = () => {
                     <button
                         type="button"
                         className="border p-3 bg-blue-500 text-white mt-8 w-full rounded-lg"
-                        disabled={!allFieldsFilled}
+                        onClick={handleAddProduct}
                     >
                         Add Product
                     </button> : <button
                         type="button"
-                        className="border p-3 bg-gray-300  text-white mt-8 w-full rounded-lg"
+                        className="border p-3 bg-gray-300 text-white mt-8 w-full rounded-lg"
                         disabled={!allFieldsFilled}
                     >
                         Add Product
                     </button>}
             </form>
-            <SelectedProducts />
+            <SelectedProducts products={selectedProducts} onStockUp={handleStockUp} />
         </div>
     );
 };

@@ -33,6 +33,9 @@ import Settings from '../components/overviewComponents/settings/settings';
 import Inventory from '../components/overviewComponents/Inventory/inventory';
 import Invoice from '../components/overviewComponents/Invoice/invoice';
 import User from '../components/overviewComponents/settings/user'
+
+
+
 const navigation = [
     { name: 'Input Order', href: '#', icon: ShoppingCartIcon },
     { name: 'Create Customer', href: '#', icon: UserCircleIcon },

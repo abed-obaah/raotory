@@ -1,9 +1,10 @@
+'use client'
+
 import { useState, useEffect } from 'react';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import axios from 'axios';
 import { useAuth } from '../../../context/AuthContext'; 
-import { TrashIcon } from "@heroicons/react/24/outline";
 
 export default function Example() {
   const [selected, setSelected] = useState(null); // Set selected user
@@ -17,7 +18,7 @@ export default function Example() {
   const [quantity, setQuantity] = useState(1); // Quantity input
   const [addedProducts, setAddedProducts] = useState([]); // List of added products
   const [grandTotal, setGrandTotal] = useState(0); // Overall total price
-  const [selectedPaymentType, setSelectedPaymentType] = useState(''); // State for payment type
+
 
   const userEmail = user?.email;
 
@@ -27,7 +28,7 @@ export default function Example() {
       const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
         params: { email: userEmail },
       })
-      console.log("response:", response);
+      console.log("response:",response)
       setCustomers(response.data.users) // Assuming response contains an array of users
     } catch (err) {
       console.error(err)
@@ -36,8 +37,8 @@ export default function Example() {
   }
 
   useEffect(() => {
-    fetchCustomers();
-  }, []);
+    fetchCustomers()
+  }, [])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -92,41 +93,13 @@ export default function Example() {
     }
   };
 
-  // Function to handle payment
- const handlePayment = async () => {
-    if (!selected || addedProducts.length === 0) {
-        alert("Please select a customer and add products before making a payment.");
-        return;
-      }
-      
-    const payload = {
-        customer_name: selected.name,
-        store_email: userEmail,
-        user_email: userEmail,
-        total_price: grandTotal,
-        payment_type: selectedPaymentType,
-        products: addedProducts.map(product => ({
-            Productname: product.product_name,
-            Quantity: product.quantity,
-            SellPrice: product.retail_price
-        }))
-    };
-
-    console.log("Payload to send:", payload);  // Log the payload
-
-    try {
-        const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
-        console.log("Payment response:", response.data);
-    } catch (error) {
-        console.error("Error making payment:", error.response ? error.response.data : error.message);
-    }
-};
 
    // Filter customers based on the search query
    const filteredCustomers = customers.filter((customer) =>
     customer.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  
   return (
     <div>
       {/* Use a standard <label> element instead of <Label /> */}
@@ -208,7 +181,7 @@ export default function Example() {
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
           placeholder="Quantity"
-          className="h-5 border p-7 w-2/4 rounded-lg"
+          className="h-5 border p-2 w-1/4 rounded-lg"
         />
 
         <input
@@ -221,83 +194,40 @@ export default function Example() {
 
         <button
           onClick={handleAddProduct}
-          className="mt-2 mb-2 bg-green-500 text-white py-1 px-3 rounded"
+          className="bg-[#0E90DA] flex justify-center rounded-md px-10 py-4 text-sm font-semibold leading-6 text-white"
         >
-          Add Product
+          Add
         </button>
       </div>
 
-      {/* Display added products */}
-      <div className="mt-9">
-    <table className="w-full">
-        <thead className="bg-customColor text-white h-12">
+      {/* Product Table */}
+      <div className="mt-8">
+        <table className="min-w-full divide-y divide-gray-300">
+          <thead className="bg-gray-50">
             <tr>
-                <th className="border bg-customColor w-1/9 font-normal">N/O</th>
-                <th className="border bg-customColor w-1/5 font-normal">Product Name</th>
-                <th className="border bg-customColor w-1/5 font-normal">Cost Price</th>
-                <th className="border bg-customColor w-1/5 font-normal">Selling Price</th>
-                <th className="border bg-customColor w-auto font-normal">Quantity</th>
-                <th className="border bg-customColor w-1/5 font-normal">Total</th>
+              <th className="py-3.5 text-left text-sm font-semibold text-gray-900">Product Name</th>
+              <th className="py-3.5 text-left text-sm font-semibold text-gray-900">Retail Price</th>
+              <th className="py-3.5 text-left text-sm font-semibold text-gray-900">Quantity</th>
+              <th className="py-3.5 text-left text-sm font-semibold text-gray-900">Total</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
             {addedProducts.map((product, index) => (
-                <tr key={index} className="border text-gray-400">
-                    <td className="border p-3">{index + 1}</td>
-                    <td className="border p-3">{product.product_name}</td>
-                    <td className="border p-3">NGN{product.cost_price}</td>
-                    <td className="border p-3" style={{ color: "black", opacity: '.8' }}>NGN{product.retail_price}</td>
-                    <td className="border p-3 w-auto">
-                        <input
-                            type="number"
-                            value={product.quantity}
-                            onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 0)}
-                            style={{ color: "white" }}
-                            className="w-full bg-gray-400 p-1 align-items"
-                        />
-                    </td>
-                    <td className="border p-3 flex justify-between">
-                        NGN{product.retail_price * product.quantity}
-                        <div className="bg-red-300 p-2 rounded-full">
-                            <TrashIcon height='20px' color="red" />
-                        </div>
-                    </td>
-                </tr>
+              <tr key={index}>
+                <td className="py-4 text-sm text-gray-900">{product.product_name}</td>
+                <td className="py-4 text-sm text-gray-500">{product.retail_price}</td>
+                <td className="py-4 text-sm text-gray-500">{product.quantity}</td>
+                <td className="py-4 text-sm text-gray-500">{product.total}</td>
+              </tr>
             ))}
-            <tr>
-                <td colSpan="5" className="border p-3 font-bold">Total</td>
-                <td className="border p-3 bg-gray-200">NGN{grandTotal}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-
-      {/* Payment section */}
-      <div className="mt-4">
-        <label htmlFor="paymentType">Payment Type</label>
-        <select
-          id="paymentType"
-          value={selectedPaymentType}
-          onChange={(e) => setSelectedPaymentType(e.target.value)}
-          className="mt-2 mb-2 border border-gray-300 rounded-md"
-        >
-          <option value="">Select Payment Type</option>
-          <option value="cash">Cash</option>
-          <option value="card">Card</option>
-          <option value="online">Online</option>
-        </select>
-
-        
+          </tbody>
+        </table>
       </div>
-      <div className=' mt-10'>
-            <button
-                            onClick={() => handleButtonClick(tier)}
-                            className="bg-[#0E90DA] flex w-full justify-center rounded-md px-10 py-4 text-sm font-semibold leading-6 text-white"
-                            >
-                           Make Payments
-                            </button>
-            </div>
+
+      {/* Grand Total */}
+      <div className="mt-4 text-right text-xl font-bold">
+        Grand Total: {grandTotal}
+      </div>
     </div>
   );
 }

@@ -24,6 +24,13 @@ import {
   UsersIcon,
   XMarkIcon,
 
+  ShoppingCartIcon,
+  UserCircleIcon,
+  NewspaperIcon,
+  QuestionMarkCircleIcon,
+  ClipboardDocumentCheckIcon,
+  ArrowPathIcon
+
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon, MoonIcon } from '@heroicons/react/20/solid'
 import Tables from '../components/Tables'
@@ -35,13 +42,32 @@ import Reports from '../components/Reports'
 import Pricing from '../components/pricing'
 import logo from '../assets/Frame.svg';
 import { Field, Label, Switch } from '@headlessui/react'
+import { useAuth } from '../context/AuthContext';
+import InputOrder from '../components/overviewComponents/input order/inputOrder';
+import Customer from '../components/overviewComponents/Create Customer/createCustomer';
+import Stock from '../components/overviewComponents/stock/stock';
+import Settings from '../components/overviewComponents/settings/settings';
+import Inventory from '../components/overviewComponents/Inventory/inventory';
+import Invoice from '../components/overviewComponents/Invoice/invoice';
+import User from '../components/overviewComponents/settings/user'
+
+// const navigation = [
+//   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
+//   { name: 'Product', href: '#', icon: UsersIcon, current: false },
+//   { name: 'Settings', href: '#', icon: FolderIcon, current: false },
+//   { name: 'Help center', href: '#', icon: CalendarIcon, current: false },
+
 
 const navigation = [
   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
-  { name: 'Product', href: '#', icon: UsersIcon, current: false },
-  { name: 'Settings', href: '#', icon: FolderIcon, current: false },
-  { name: 'Help center', href: '#', icon: CalendarIcon, current: false },
+  { name: 'Input Order', href: '#', icon: ShoppingCartIcon , current: false},
+  { name: 'Create Customer', href: '#', icon: UserCircleIcon, current: false  },
+  { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false  },
+  { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false  },
+  { name: 'Settings', href: '#', icon: Cog6ToothIcon,current: false  },
+  { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon,current: false  },
 ];
+// ];
 
 
 const userNavigation = [
@@ -57,6 +83,10 @@ export default function Example() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Overview');
   const [enabled, setEnabled] = useState(false)
+  const { user, isAuthenticated } = useAuth();
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
 
   const renderContent = () => {
     switch (selectedItem) {
@@ -65,15 +95,44 @@ export default function Example() {
       // return <Tables />;
       return <OverView />;
       case 'Product':
-        return <SalesOrder />;
-      case 'Settings':
-        return <StockDrugs />;
+        // return <SalesOrder />;
+        return <Stock />;
+      // case 'Settings':
+      //   return <StockDrugs />;
       case 'Help center':
         return <Reports />;
+        case 'Input Order':
+                return <InputOrder />;
+            case 'Create Customer':
+                return <Customer />;
+            case 'Stock Products':
+                return <Stock />;
+            case 'Invoice':
+                return <Invoice />;
+            case 'Inventory':
+                return <Inventory />;
+                case 'Settings':
+                  setSelectedItem('General Settings')
+              case 'General Settings':
+                  return <Settings />;
+            case 'Users':
+                return <User />;
       default:
         return <Pricing />;
     }
   };
+
+  const handleProductClick = () => {
+    setProductsOpen(prev => !prev);
+    setSettingsOpen(false); // Close Settings submenu
+    setSelectedItem('Products');
+};
+
+const handleSettingsClick = () => {
+    setSettingsOpen(prev => !prev);
+    setProductsOpen(false); // Close Products submenu
+    setSelectedItem('Settings');
+};
 
   return (
     <>
@@ -111,31 +170,85 @@ export default function Example() {
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
-                      <ul role="list" className="-mx-2 space-y-1">
-                        {navigation.map((item) => (
-                          <li key={item.name}>
-                            <a
-                              href={item.href}
-                              onClick={() => setSelectedItem(item.name)}
-                              className={classNames(
-                                item.name === selectedItem
-                                  ? 'bg-[#E5FFF0] text-[#444444]'
-                                  : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
-                                'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-                              )}
-                            >
-                              <item.icon
-                                aria-hidden="true"
-                                className={classNames(
-                                  item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
-                                  'h-6 w-6 shrink-0',
-                                )}
-                              />
-                              {item.name}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                    <ul role="list" className="-mx-2 space-y-1">
+                                                {navigation.map((item) => (
+                                                    <li key={item.name}>
+                                                        <a
+                                                            href={item.href}
+                                                            onClick={item.name === 'Products' ? handleProductClick : item.name === 'Settings' ? handleSettingsClick : () => setSelectedItem(item.name)}
+                                                            className={classNames(
+                                                                item.name === selectedItem
+                                                                    ? 'bg-[#E5FFF0] text-[#444444]'
+                                                                    : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
+                                                                'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                                                            )}
+                                                        >
+                                                            <item.icon
+                                                                aria-hidden="true"
+                                                                className={classNames(
+                                                                    item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
+                                                                    'h-6 w-6 shrink-0',
+                                                                )}
+                                                            />
+                                                            {item.name}
+                                                        </a>
+                                                        {item.name === 'Products' && productsOpen && (
+                                                            <ul className="pl-8 mt-2 space-y-1">
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('Stock Products')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        Stock Products
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('Returned Products')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        Returned Products
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('Inventory')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        Inventory
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        )}
+                                                        {item.name === 'Settings' && settingsOpen && (
+                                                            <ul className="pl-8 mt-2 space-y-1">
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('General Settings')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        General
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a
+                                                                        href="#"
+                                                                        onClick={() => setSelectedItem('Users')}
+                                                                        className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                                    >
+                                                                        Users
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        )}
+                                                    </li>
+                                                ))}
+                                            </ul>
                     </li>
                     <li className="mt-auto">
                       <a
@@ -172,31 +285,85 @@ export default function Example() {
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
-                  <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          onClick={() => setSelectedItem(item.name)}
-                          className={classNames(
-                            item.name === selectedItem
-                              ? 'bg-[#E5FFF0] text-[#444444]'
-                              : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
-                            'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-                          )}
-                        >
-                          <item.icon
-                            aria-hidden="true"
-                            className={classNames(
-                              item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
-                              'h-6 w-6 shrink-0',
-                            )}
-                          />
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                <ul role="list" className="-mx-2 space-y-1">
+                                        {navigation.map((item) => (
+                                            <li key={item.name}>
+                                                <a
+                                                    href={item.href}
+                                                    onClick={item.name === 'Products' ? handleProductClick : item.name === 'Settings' ? handleSettingsClick : () => setSelectedItem(item.name)}
+                                                    className={classNames(
+                                                        item.name === selectedItem
+                                                            ? 'bg-[#E5FFF0] text-[#444444]'
+                                                            : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                                                    )}
+                                                >
+                                                    <item.icon
+                                                        aria-hidden="true"
+                                                        className={classNames(
+                                                            item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
+                                                            'h-6 w-6 shrink-0',
+                                                        )}
+                                                    />
+                                                    {item.name}
+                                                </a>
+                                                {item.name === 'Products' && productsOpen && (
+                                                    <ul className="pl-8 mt-2 space-y-1">
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('Stock Products')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                Stock Products
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('Returned Products')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                Returned Products
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('Inventory')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                Inventory
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                )}
+                                                {item.name === 'Settings' && settingsOpen && (
+                                                    <ul className="pl-8 mt-2 space-y-1">
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('General Settings')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                General
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => setSelectedItem('Users')}
+                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
+                                                            >
+                                                                Users
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
 
                 </li>
                 <li className="mt-auto">
@@ -255,6 +422,11 @@ export default function Example() {
           </div>
 
           <main className="py-10">
+                {/* {isAuthenticated ? (
+              <p>Welcome, {user.email}!</p>
+            ) : (
+              <p>Please log in.</p>
+            )} */}
             <div className="px-4 sm:px-6 lg:px-8">
               {renderContent()}
             </div>

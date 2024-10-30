@@ -1,89 +1,58 @@
-import { Menu } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid'; // Ensure you have this icon imported
+import * as React from 'react';
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-// import { BarChart } from '@mui/x-charts/BarChart';
-import { LineChart } from '@mui/x-charts/LineChart';
+import Typography from '@mui/material/Typography';
+import { PieChart } from '@mui/x-charts/PieChart';
+import { platforms } from './webUsageStats';
 
-// const barChartsParams = {
-//   xAxis: [
-//     {
-//       data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-//       scaleType: 'band',
-//     },
-//   ],
-//   series: [
-//     { data: [2, 5, 3, 4, 1, 6, 8, 7, 5, 3, 2, 4], stack: '1', label: 'Jobs Applied', color: '#008C38' },
-//     // #E5FFF0
-//     { data: [8, 6, 7, 5, 3, 4, 9, 2, 10, 6, 8, 7], stack: '1', label: 'Jobs viewed', color: '#E5FFF0' },
-//     // #008C38
-//   ],
-//   margin: { top: 20, right: 20, bottom: 20, left: 40 },
-//   height: 400,
-//   width: 900,
-//   barCategoryGap: '30%', // Adjust this for spacing between bar categories
-//   barGap: -10, // Adjust this for spacing between bars
-//   borderRadius: 5,
-//   slotProps: {
-//     legend: {
-//       hidden: false, // Show legend
-//     },
-//   },
-// };
+const palette = ['lightcoral', 'slateblue'];
 
-const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
-const dData = [3400, 2398, 8800, 4908, 4800, 3200, 4100];
-const xLabels = [
-  'Page A',
-  'Page B',
-  'Page C',
-  'Page D',
-  'Page E',
-  'Page F',
-  'Page G',
+const colorPerItem = [
+  { ...platforms[0], color: 'orange' },
+  { ...platforms[1], color: 'gray' },
 ];
 
-export default function Example() {
+export default function PieColor() {
+  const data = [
+    { id: 1, value: 50, label: 'Male', color: '#0E90DA' },
+    { id: 0, value: 15, label: 'Female', color: '#001B2A' },
+    { id: 2, value: 0, label: 'Prefer not to say', color: '#CA0000' },
+  ];
+
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow mt-10">
-      <div className="px-4 py-5 sm:p-6">
-        <Menu as="div" className="relative inline-block text-left">
-          <div>
-            <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-              This month
-              <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-gray-400" />
-            </Menu.Button>
-          </div>
-
-          <Menu.Items
-            className="absolute left-0 mt-2 w-56 bg-[#F2EFFF] origin-top-right rounded-md  shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none z-10"
-          >
-            <div className="py-1">
-              <Menu.Item>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  last month
-                </a>
-              </Menu.Item>
+    <Stack direction="column" width="100%" textAlign="center" spacing={1} alignItems="center">
+       <Box flexGrow={1}>
+        {/* <Typography>Default</Typography> */}
+        <PieChart
+          series={[
+            {
+              data: platforms,
+            },
+          ]}
+          {...pieParams}  // Pass in the modified pieParams with larger dimensions
+        />
+      </Box>
+     
+      <Box>
+        {data.map((item) => (
+          <div key={item.id} style={{ margin: '5px 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Rounded Colored Box */}
+            <div style={{ width: '30px', height: '10px', backgroundColor: item.color, marginRight: '8px', borderRadius: '7.5px' }}></div>
+            {/* Label with fixed width */}
+            <div style={{ width: '150px', textAlign: 'left' }}>
+              <p>{item.label}</p>
             </div>
-          </Menu.Items>
-        </Menu>
-
-        <Stack direction="column" sx={{ width: '100%', maxWidth: 900 }}>
-        <LineChart
-                width={1000}
-                height={500}
-                series={[
-                    { data: pData, label: 'Direct Sales' },
-                    { data: uData, label: 'Retail' },
-                    { data: dData, label: 'Wholesale' },
-                ]}
-                xAxis={[{ scaleType: 'point', data: xLabels }]}
-                />
-        </Stack>
-      </div>
-    </div>
+          </div>
+        ))}
+      </Box>
+    </Stack>
   );
 }
+
+// Increase the height and width of the pie chart
+const pieParams = {
+  height: 200,  // Increased height
+  width: 200,   // Added width to ensure it's larger
+  margin: { right: 5 },
+  slotProps: { legend: { hidden: true } },
+};

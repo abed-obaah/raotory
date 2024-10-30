@@ -88,7 +88,7 @@ export default function Example() {
                     type="text"
                     value={formData.manufacture_date}
                     onChange={handleChange}
-                    placeholder='Manufacture date (YY/MM/DD)'
+                    placeholder='Manufacture date (YY/MM/DD)s'
                     className="block w-full py-3 px-4 rounded-md border border-gray-400 shadow-sm focus:border-[#E5FFF0] focus:ring-[#E5FFF0] focus:outline-none sm:text-sm"
                   />
                 </div>

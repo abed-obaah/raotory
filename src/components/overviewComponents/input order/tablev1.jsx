@@ -43,13 +43,17 @@ const CreateTable = ({ tab, tableInfo, setTableInfo }) => {
                             <td className="border p-3" style={{ color: "black", opacity: '.8' }}>NGN{item.SellPrice}</td>
                             <td className="border p-3 w-1/5">
                                 {tab === 'input' ? (
-                                    <input
-                                        type="number"
-                                        value={item.Quantity}
-                                        onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 0)}
-                                        style={{ color: "white" }}
-                                        className="w-full bg-gray-400 p-1 align-items"
-                                    />
+                                    // <input
+                                    //     type="number"
+                                    //     value={item.Quantity}
+                                    //     onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 0)}
+                                    //     style={{ color: "white" }}
+                                    //     className="w-full bg-gray-400 p-1 align-items"
+                                    //     readOnly
+                                    // />
+                                    <div>
+                                        {item.Quantity}
+                                    </div>
                                 ) : (
                                     item.Quantity
                                 )}

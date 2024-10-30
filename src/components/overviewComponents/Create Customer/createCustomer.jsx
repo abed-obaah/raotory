@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Table from './Table';
-import Form from './form'
+// import Form from './form'
 const createCustomercomponent = () => {
 
     const [tab, setTab] = useState('table');

@@ -1,66 +1,34 @@
 import React from "react";
 
-const selectedTab = () => {
-    const products = [{
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }, {
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }, {
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }, {
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }, {
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }, {
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }, {
-        product: 'Sardine',
-        amount: 2000,
-        price: 20200,
-        expires: '11 Sep, 2025'
-    }]
-    return (
+const SelectedProducts = ({ products, onStockUp }) => { // Receive products and onStockUp as props
 
+    return (
         <section className="border w-1/4 p-2 display-inline rounded-lg overflow-y-scroll" style={{ height: '80vh' }}>
             <h2 className="pl-3">Selected Products</h2>
-            <p className="text-xs text-gray-400 pl-3">Selected products displays here</p>
+            <p className="text-xs text-gray-400 pl-3">Selected products display here</p>
             <div className="contain">
-                {products.map((product) => {
-
-                    return (
-                        <div className="flex justify-between p-4">
+                {products.length === 0 ? (
+                    <p className="text-center text-gray-400">No products added yet.</p>
+                ) : (
+                    products.map((product, index) => (
+                        <div className="flex justify-between p-4" key={index}>
                             <div className="lefttext">
-                                <p className="text-normal">{product.product} <span>x {product.amount}</span></p>
-                                <p className="text-xs text-gray-400">Expires: {product.expires}</p>
+                                <p className="text-normal">{product.productName} <span>x {product.quantity}</span></p>
+                                <p className="text-xs text-gray-400">Expires: {product.expirationDate}</p>
+                                <p className="text-xs text-gray-400">Batch Number: {product.batchNumber}</p>
+                                {/* <p className="text-xs text-gray-400">Wholesale Price: {product.wholesalePrice}</p>
+                                <p className="text-xs text-gray-400">Purchase Price: {product.purchasePrice}</p>
+                                <p className="text-xs text-gray-400">Quantity: {product.quantity}</p> */}
                             </div>
-                            <p className="text-normal">NGN{product.price}</p>
+                            <p className="text-normal">NGN {product.retailPrice}</p>
                         </div>
-                    )
-
-                })}
+                    ))
+                )}
             </div>
 
-            <button className="border bg-blue-500 rounded-lg p-3 text-white w-full">Stock Up</button>
+            <button className="border bg-blue-500 rounded-lg p-3 text-white w-full" onClick={onStockUp}>Stock Up</button>
         </section>
-    )
-}
+    );
+};
 
-export default selectedTab;
+export default SelectedProducts;
