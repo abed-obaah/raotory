@@ -15,11 +15,12 @@ export default function Example() {
   const userEmail = user?.email; // Get the email, if available
 
   const [selectedComponent, setSelectedComponent] = useState(() => Chart);
-  const [salesCount, setSalesCount] = useState('6,728'); // Default value
-  const [todaySales, setTodaySales] = useState('NGN 238,908.00'); // Default today sales value
+  const [salesCount, setSalesCount] = useState('0'); // Default value
+  const [todaySales, setTodaySales] = useState('NGN 00.00'); // Default today sales value
   const [profitMade, setProfitMade] = useState('NGN 0.00'); // Initialize profit state
   const [totalProductsSold, setTotalProductsSold] = useState('0'); // New state for total products sold
   const [isLoading, setIsLoading] = useState(true);
+  const [totalProductsCount, setTotalProductsCount] = useState(0);
 
 
   useEffect(() => {
@@ -37,8 +38,9 @@ export default function Example() {
           // Calculate total profits made from the profits array
           const totalProfits = data.profits.reduce((total, profit) => total + profit.profit_made, 0);
           setProfitMade(`NGN ${totalProfits.toFixed(2)}`); // Update profit made
-          
-          // Set total products sold if available
+    
+          // Count the number of products sold from the profits array
+          setTotalProductsCount(data.profits.length); // Set the count of products sold
           setTotalProductsSold(data.total_products_sold || '0'); // Assuming your API returns this value
         } else {
           console.error('Failed to fetch sales data:', data.error); // Log the error message if the API call was not successful
@@ -74,10 +76,10 @@ export default function Example() {
       id: 2,
       icon: UserIcon,
       backgroundColor: "bg-[#F0E8FC]",
-      amount: isLoading ? "Loading..." : salesCount,
+      amount: isLoading ? "Loading..." : totalProductsCount, // Use total products count
       analytics: '20%',
       analyticsText: 'Than last month',
-      description: "No of invoices issued",
+      description: "No of invoices issued", // Consider updating this description to be more relevant
       component: UserComponent
     },
     {
