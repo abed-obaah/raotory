@@ -9,18 +9,11 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
             try {
                 const response = await fetch("https://raotory.com.ng/apis/get_sales.php?store_email=abedobaah@gmail.com");
                 const data = await response.json();
-                console.log(data)
+                console.log(data);
 
                 if (data.success && data.sales.length > 0) {
-                    const formattedInvoices = data.sales.map(sale => ({
-                        name: sale.customer_name,
-                        number: sale.id,
-                        type: sale.payment_type,
-                        status: sale.status || "Unknown",
-                        total: sale.total_price || 0,
-                        paid: sale.paid || 0
-                    }));
-                    setInvoices(formattedInvoices);
+                    // Retain the entire sale object in invoices
+                    setInvoices(data.sales);
                 } else {
                     console.log("No sales found");
                 }
@@ -68,10 +61,10 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
             <tbody>
                 {invoices.map((invoice, index) => (
                     <tr key={index} className="text-left rounded-lg text-blue-900 font-semibold">
-                        <td className="mb-5 h-10">{invoice.name}</td>
-                        <td>{invoice.number}</td>
-                        <td>{invoice.type}</td>
-                        {Type(invoice.status)}
+                        <td className="mb-5 h-10">{invoice.customer_name}</td>
+                        <td>{invoice.id}</td>
+                        <td>{invoice.payment_type}</td>
+                        {Type(invoice.status || "Unknown")}
                         <td className="text-center">
                             <button className="border bg-blue-600 px-7 py-1 text-white rounded" onClick={() => handleClick(invoice)}>
                                 View
@@ -85,3 +78,5 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
 };
 
 export default Table;
+
+
