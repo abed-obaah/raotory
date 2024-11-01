@@ -6,16 +6,9 @@ const InvoiceTable = () => {
   const [todaySales, setTodaySales] = useState("NGN 0");
   const [totalProductsSold, setTotalProductsSold] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [stockAlert, setStockAlert] = useState([]); // State to store stock alert data from API
   const { user } = useAuth(); // Get user from AuthContext
   const userEmail = user?.email;
-
-  const stockAlert = [
-    { product: "Sardine", quantity: 300 },
-    { product: "Fish", quantity: 250 },
-    { product: "Sardine", quantity: 300 },
-    { product: "Fish", quantity: 250 },
-    { product: "Sardine", quantity: 300 },
-  ];
 
   // Format date in YYYY-MM-DD format
   const formatDate = (date) => {
@@ -31,7 +24,6 @@ const InvoiceTable = () => {
         console.log(data); // Log the entire response data for debugging
 
         if (data.success) {
-          // Get the current date in YYYY-MM-DD format
           const today = formatDate(new Date());
 
           // Filter sales made today using `sold_date`
@@ -44,7 +36,6 @@ const InvoiceTable = () => {
           const totalTodaySales = todaySalesData.reduce((total, sale) => total + parseFloat(sale.sell_price), 0);
           setTodaySales(`NGN ${totalTodaySales.toFixed(2)}`); // Update today’s sales formatted as currency
 
-          // Set total products sold
           setTotalProductsSold(data.sales.length); // Update total number of sales
 
           // Update invoices from API data
@@ -66,9 +57,24 @@ const InvoiceTable = () => {
       }
     };
 
+    // Fetch the latest stock alerts
+    const fetchStockAlert = async () => {
+      try {
+        const response = await fetch("https://raotory.com.ng/apis/get_latest_drugs.php");
+        const data = await response.json();
+
+        // Assuming the response is an array of drugs with `product_name` and `quantity`
+        setStockAlert(data); // Update stockAlert state with the fetched data
+      } catch (err) {
+        console.error('Error fetching stock alerts:', err);
+      }
+    };
+
     if (userEmail) {
       fetchSalesData(); // Call the function to fetch sales data if userEmail is available
     }
+    
+    fetchStockAlert(); // Call the function to fetch stock alert data
   }, [userEmail]);
 
   const getStatusStyle = (status) => {
@@ -135,7 +141,7 @@ const InvoiceTable = () => {
             <tbody>
               {stockAlert.map((stock, index) => (
                 <tr key={index}>
-                  <td className="border border-gray-200 px-4 py-2">{stock.product}</td>
+                  <td className="border border-gray-200 px-4 py-2">{stock.product_name}</td>
                   <td className="border border-gray-200 px-4 py-2">{stock.quantity}</td>
                 </tr>
               ))}
