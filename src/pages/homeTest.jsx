@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState } from 'react'
@@ -23,44 +24,60 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+
   ShoppingCartIcon,
   UserCircleIcon,
   NewspaperIcon,
   QuestionMarkCircleIcon,
   ClipboardDocumentCheckIcon,
   ArrowPathIcon
+
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon, MoonIcon } from '@heroicons/react/20/solid'
 import Tables from '../components/Tables'
-import OverView from '../components/OverView'
-import SalesOrder from '../components/SalesOrder'
-import StockDrugs from '../components/StockDrugs'
+import  OverView from '../components/OverView'
+// import { HomeIcon, UsersIcon, FolderIcon, CalendarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import SalesOrder from '../components/SalesOrder';
+import StockDrugs from '../components/StockDrugs';
 import Reports from '../components/Reports'
 import Pricing from '../components/pricing'
-import logo from '../assets/Frame.svg'
+import logo from '../assets/Frame.svg';
 import { Field, Label, Switch } from '@headlessui/react'
-import { useAuth } from '../context/AuthContext'
-import InputOrder from '../components/overviewComponents/input order/inputOrder'
-import Customer from '../components/overviewComponents/Create Customer/createCustomer'
-import Stock from '../components/overviewComponents/stock/stock'
-import Settings from '../components/overviewComponents/settings/settings'
-import Inventory from '../components/overviewComponents/Inventory/inventory'
-import Invoice from '../components/overviewComponents/Invoice/invoice'
+import { useAuth } from '../context/AuthContext';
+import InputOrder from '../components/overviewComponents/input order/inputOrder';
+import Customer from '../components/overviewComponents/Create Customer/createCustomer';
+import Stock from '../components/overviewComponents/stock/stock';
+import Settings from '../components/overviewComponents/settings/settings';
+import Inventory from '../components/overviewComponents/Inventory/inventory';
+import Invoice from '../components/overviewComponents/Invoice/invoice';
 import User from '../components/overviewComponents/settings/user'
 import bell from '../assets/Bell.svg'
 import refresh from '../assets/refresh.svg'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+
+// import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+// import { useAuth } from '../../../context/AuthContext';
+
+
+// const navigation = [
+//   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
+//   { name: 'Product', href: '#', icon: UsersIcon, current: false },
+//   { name: 'Settings', href: '#', icon: FolderIcon, current: false },
+//   { name: 'Help center', href: '#', icon: CalendarIcon, current: false },
+
 
 const navigation = [
   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
-  { name: 'Input Order', href: '#', icon: ShoppingCartIcon , current: false },
-  { name: 'Create Customer', href: '#', icon: UserCircleIcon, current: false },
-  { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false },
-  { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false },
-  { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
-  { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon, current: false },
+  { name: 'Input Order', href: '#', icon: ShoppingCartIcon , current: false},
+  { name: 'Create Customer', href: '#', icon: UserCircleIcon, current: false  },
+  { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false  },
+  { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false  },
+  { name: 'Settings', href: '#', icon: Cog6ToothIcon,current: false  },
+  { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon,current: false  },
 ];
+// ];
+
 
 const userNavigation = [
   { name: 'Your profile', href: '#' },
@@ -72,80 +89,90 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState('Overview')
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState('Overview');
   const [enabled, setEnabled] = useState(false)
-  const { user, isAuthenticated, logout } = useAuth()
-  const [open, setOpen] = useState(false)
-
-
+  const { user, isAuthenticated } = useAuth();
   const [productsOpen, setProductsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { logout } = useAuth();
 
+  const navigate = useNavigate(); // Use the useNavigate hook for navigation
 
+  console.log("User data:ssss", user);
 
-  const navigate = useNavigate() // Use the useNavigate hook for navigation
+  // const handleLogout = () => {
+  //   logout(); // Clear user data and authentication status
+  //   navigate('/login'); // Redirect to login page
+  // };
 
   const handleLogout = () => {
-    logout() // Clear user data and authentication status
-    localStorage.removeItem('authToken')
-    sessionStorage.clear()
-    setOpen(false)
-    navigate('/login') // Redirect to login page
-  }
+    // Clear user details from context or state
+    logout(); // Assuming you have a logout method in your AuthContext
+  
+    // Clear local storage or session storage if you store any user data or tokens
+    localStorage.removeItem('authToken');
+    sessionStorage.clear();
+  
+    setOpen(false);
+    // Optionally display a message
+    setMessage('You have successfully logged out.');
+  
+    // Redirect to login page
+    navigate('/login');
+  };
 
   const renderContent = () => {
-    const isPaid = user && user.paid_status === "1" // Check if the user has paid status of "1"
-
-    if (!isPaid) {
-      // If not paid, return Pricing for all selected items
-      return <Pricing />
-    }
-
-    // If paid, display content based on selectedItem
     switch (selectedItem) {
       case 'Overview':
-        return <OverView />
+        // return <Pricing />;
+      // return <Tables />;
+      return <OverView />;
       case 'Product':
-        return <Stock />
+        // return <SalesOrder />;
+        return <Stock />;
+      // case 'Settings':
+      //   return <StockDrugs />;
       case 'Help center':
-        return <Reports />
-      case 'Input Order':
-        return <InputOrder />
-      case 'Create Customer':
-        return <Customer />
-      case 'Stock Products':
-        return <Stock />
-      case 'Invoice':
-        return <Invoice />
-      case 'Inventory':
-        return <Inventory />
-      case 'Settings':
-        setSelectedItem('General Settings')
-      case 'General Settings':
-        return <Settings />
-      case 'Users':
-        return <User />
+        return <Reports />;
+        case 'Input Order':
+                return <InputOrder />;
+            case 'Create Customer':
+                return <Customer />;
+            case 'Stock Products':
+                return <Stock />;
+            case 'Invoice':
+                return <Invoice />;
+            case 'Inventory':
+                return <Inventory />;
+                case 'Settings':
+                  setSelectedItem('General Settings')
+              case 'General Settings':
+                  return <Settings />;
+            case 'Users':
+                return <User />;
       default:
-        return <Pricing />
+        return <Pricing />;
     }
-  }
+  };
 
   const handleProductClick = () => {
-    setProductsOpen(prev => !prev)
-    setSettingsOpen(false) // Close Settings submenu
-    setSelectedItem('Products')
-  }
+    setProductsOpen(prev => !prev);
+    setSettingsOpen(false); // Close Settings submenu
+    setSelectedItem('Products');
+};
 
-  const handleSettingsClick = () => {
-    setSettingsOpen(prev => !prev)
-    setProductsOpen(false) // Close Products submenu
-    setSelectedItem('Settings')
-  }
+const handleSettingsClick = () => {
+    setSettingsOpen(prev => !prev);
+    setProductsOpen(false); // Close Products submenu
+    setSelectedItem('Settings');
+};
 
   return (
     <>
-     <div>
+
+      <div>
         <Dialog open={sidebarOpen} onClose={setSidebarOpen} className="relative z-50 lg:hidden">
           <DialogBackdrop
             transition
