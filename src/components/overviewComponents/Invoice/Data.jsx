@@ -75,6 +75,6 @@ const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedC
             </button>
         </>
     );
-}
+};
 
 export default Data;

@@ -57,7 +57,11 @@ const Invoice = () => {
                         style={{ backgroundColor: 'white', color: 'black' }}
                     />
                 </div>
-                <Table tab={tab} setTab={setTab} setSelectedInvoice={setSelectedInvoice} />
+                <Table 
+                    tab={tab} 
+                    setTab={setTab} 
+                    setSelectedInvoice={setSelectedInvoice} // Ensure you are setting the selected invoice here
+                />
             </>
         );
     };
@@ -66,9 +70,30 @@ const Invoice = () => {
         case 'All':
             return All();
         case "Data":
-            return <Data tab={tab} setTab={setTab} products={products} selectedCount={selectedCount} setSelectedCount={setSelectedCount} selectedRows={selectedRows} setSelectedRows={setSelectedRows} selectedInvoice={selectedInvoice} />;
+            return <Data 
+                tab={tab} 
+                setTab={setTab} 
+                products={products} 
+                selectedCount={selectedCount} 
+                setSelectedCount={setSelectedCount} 
+                selectedRows={selectedRows} 
+                setSelectedRows={setSelectedRows} 
+                selectedInvoice={selectedInvoice} 
+            />;
         case 'Refund':
-            return <Refund tab={tab} setTab={setTab} products={products} selectedCount={selectedCount} setSelectedCount={setSelectedCount} selectedRows={selectedRows} setSelectedRows={setSelectedRows} setSelectedInvoice={setSelectedInvoice} />;
+            return <Refund 
+                tab={tab} 
+                setTab={setTab} 
+                products={products} 
+                selectedCount={selectedCount} 
+                setSelectedCount={setSelectedCount} 
+                selectedRows={selectedRows} 
+                setSelectedRows={setSelectedRows} 
+                setSelectedInvoice={setSelectedInvoice} 
+                selectedInvoice={selectedInvoice} // Pass the selectedInvoice to the Refund component
+            />;
+        default:
+            return null; // or some fallback UI
     }
 };
 

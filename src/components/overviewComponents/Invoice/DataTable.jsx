@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
+import PropTypes from 'prop-types';
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 
 const Table = ({ onRowSelection, selectedCount, selectedRows, setSelectedRows, products, tab, setSelectedCount }) => {
     const thead = ['N/O', "Product Name", "Cost Price", 'Selling Price', 'Quantity', "Total"];
 
     useEffect(() => {
-        onRowSelection(selectedRows.length); // Pass the count of selected rows to the parent component
+        if (typeof onRowSelection === 'function') {
+            onRowSelection(selectedRows.length); // Pass the count of selected rows to the parent component
+        } else {
+            console.error('onRowSelection is not a function', onRowSelection);
+        }
     }, [selectedRows, onRowSelection]);
 
     const toggleRow = (product) => {
@@ -16,10 +21,6 @@ const Table = ({ onRowSelection, selectedCount, selectedRows, setSelectedRows, p
             setSelectedRows([...selectedRows, product.id]);
         }
     };
-
-    const handleRowSelection = (count) => {
-        setSelectedCount(count); // Here count is the number of selected rows
-    }
 
     return (
         <>
@@ -55,6 +56,17 @@ const Table = ({ onRowSelection, selectedCount, selectedRows, setSelectedRows, p
             </table>
         </>
     );
+};
+
+// PropTypes for validation
+Table.propTypes = {
+    onRowSelection: PropTypes.func.isRequired,
+    selectedCount: PropTypes.number.isRequired,
+    selectedRows: PropTypes.array.isRequired,
+    setSelectedRows: PropTypes.func.isRequired,
+    products: PropTypes.array.isRequired,
+    tab: PropTypes.string.isRequired,
+    setSelectedCount: PropTypes.func.isRequired,
 };
 
 export default Table;
