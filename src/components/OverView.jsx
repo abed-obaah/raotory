@@ -9,7 +9,6 @@ import InvoiceTable from './InvoiceTable';
 import Chart from './Chart';
 import { useAuth } from '../context/AuthContext'; // Import the useAuth hook
 
-
 export default function Example() {
   const { user } = useAuth(); // Get user from AuthContext
   const userEmail = user?.email; // Get the email, if available
@@ -22,6 +21,10 @@ export default function Example() {
   const [isLoading, setIsLoading] = useState(true);
   const [totalProductsCount, setTotalProductsCount] = useState(0);
 
+  // Function to format date into YYYY-MM-DD
+  const formatDate = (date) => {
+    return date.toISOString().split('T')[0]; // Returns only the date part
+  };
 
   useEffect(() => {
     const fetchSalesData = async () => {
@@ -30,25 +33,34 @@ export default function Example() {
         const data = await response.json();
         
         console.log(data); // Log the entire response data for debugging
-    
+
         if (data.success) {
-          setSalesCount(data.total_sales_count); // Update the sales count
-          setTodaySales(`NGN ${parseFloat(data.total_sales_today).toFixed(2)}`); // Update today’s sale, formatted as currency
-          
-          // Calculate total profits made from the profits array
+          // Get the current date in YYYY-MM-DD format
+          const today = formatDate(new Date());
+
+          // Filter sales made today using `sold_date`
+          const todaySalesData = data.profits.filter(sale => {
+            const saleDate = formatDate(new Date(sale.sold_date));
+            return saleDate === today;
+          });
+
+          // Sum today's sales
+          const totalTodaySales = todaySalesData.reduce((total, sale) => total + sale.total_sales, 0);
+          setTodaySales(`NGN ${totalTodaySales.toFixed(2)}`); // Update today’s sales formatted as currency
+
+          // Set other state values (total profits, products count)
           const totalProfits = data.profits.reduce((total, profit) => total + profit.profit_made, 0);
           setProfitMade(`NGN ${totalProfits.toFixed(2)}`); // Update profit made
-    
-          // Count the number of products sold from the profits array
-          setTotalProductsCount(data.profits.length); // Set the count of products sold
+
+          setTotalProductsCount(data.profits.length); // Set total number of products
           setTotalProductsSold(data.total_products_sold || '0'); // Assuming your API returns this value
         } else {
-          console.error('Failed to fetch sales data:', data.error); // Log the error message if the API call was not successful
+          console.error('Failed to fetch sales data:', data.error);
         }
       } catch (err) {
-        console.error('Error fetching sales data:', err); // Catch any other errors that occur during the fetch
+        console.error('Error fetching sales data:', err);
       } finally {
-        setIsLoading(false); // Set loading to false once fetch is done
+        setIsLoading(false);
       }
     };
 

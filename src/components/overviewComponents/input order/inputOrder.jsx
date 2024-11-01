@@ -295,7 +295,7 @@ export default function Example() {
     onClick={handlePayment}  // Call handlePayment function here
     className="bg-[#0E90DA] flex w-full justify-center rounded-md px-10 py-4 text-sm font-semibold leading-6 text-white"
   >
-    Make Payments
+    Make Payment
   </button>
 </div>
     </div>
