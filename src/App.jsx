@@ -22,8 +22,8 @@ export default function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/forgetPassword' element={<ForgetPassword />} />
           <Route path='/passwordResetOtp' element={<PasswordResetOtp />} />
-          <Route path='/inputOrder' element={<InputOrder />} />
-          {/* <Route path='/inputOrder' element={<ProtectedRoute element={<InputOrder/>} />} /> */}
+          {/* <Route path='/inputOrder' element={<InputOrder />} /> */}
+          <Route path='/inputOrder' element={<ProtectedRoute element={<InputOrder/>} />} />
           {/* <Route path='/Payment' element={<ProtectedRoute element={<Payment/>} />} /> */}
         </Routes>
       </Router>

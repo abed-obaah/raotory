@@ -11,6 +11,7 @@ import {
   MenuItem,
   MenuItems,
   TransitionChild,
+  DialogTitle 
 } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -51,6 +52,12 @@ import Inventory from '../components/overviewComponents/Inventory/inventory';
 import Invoice from '../components/overviewComponents/Invoice/invoice';
 import User from '../components/overviewComponents/settings/user'
 
+// import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+// import { useAuth } from '../../../context/AuthContext';
+
+
 // const navigation = [
 //   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
 //   { name: 'Product', href: '#', icon: UsersIcon, current: false },
@@ -86,7 +93,33 @@ export default function Example() {
   const { user, isAuthenticated } = useAuth();
   const [productsOpen, setProductsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { logout } = useAuth();
 
+  const navigate = useNavigate(); // Use the useNavigate hook for navigation
+
+ 
+
+  // const handleLogout = () => {
+  //   logout(); // Clear user data and authentication status
+  //   navigate('/login'); // Redirect to login page
+  // };
+
+  const handleLogout = () => {
+    // Clear user details from context or state
+    logout(); // Assuming you have a logout method in your AuthContext
+  
+    // Clear local storage or session storage if you store any user data or tokens
+    localStorage.removeItem('authToken');
+    sessionStorage.clear();
+  
+    setOpen(false);
+    // Optionally display a message
+    setMessage('You have successfully logged out.');
+  
+    // Redirect to login page
+    navigate('/login');
+  };
 
   const renderContent = () => {
     switch (selectedItem) {
@@ -392,6 +425,7 @@ const handleSettingsClick = () => {
 
                   <a
                     href="#"
+                    onClick={() => setOpen(true)} // Open the modal when clicked
                     className="group mt-5 -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-[#CA0000] hover:bg-gray-50 hover:text-indigo-600"
                   >
                     <Cog6ToothIcon
@@ -405,6 +439,52 @@ const handleSettingsClick = () => {
             </nav>
           </div>
         </div>
+
+        <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
+        <DialogBackdrop
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+        />
+
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <DialogPanel
+              className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+            >
+              <div className="sm:flex sm:items-start">
+                <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <ExclamationTriangleIcon aria-hidden="true" className="h-6 w-6 text-red-600" />
+                </div>
+                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                  <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
+                    Confirm Logout
+                  </DialogTitle>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Are you sure you want to log out? This action will end your session.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 sm:ml-10 sm:mt-4 sm:flex sm:pl-4">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
+                >
+                  Logout
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto"
+                >
+                  Cancel
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
 
         <div className="lg:pl-72">
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
