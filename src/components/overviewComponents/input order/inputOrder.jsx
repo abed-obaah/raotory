@@ -4,6 +4,9 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import axios from 'axios';
 import { useAuth } from '../../../context/AuthContext'; 
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { ToastContainer, toast } from 'react-toastify';  // Import toast components
+import 'react-toastify/dist/ReactToastify.css';  // Import toast styles
+
 
 export default function Example() {
   const [selected, setSelected] = useState(null); // Set selected user
@@ -93,33 +96,69 @@ export default function Example() {
   };
 
   // Function to handle payment
- const handlePayment = async () => {
-    if (!selected || addedProducts.length === 0) {
-        alert("Please select a customer and add products before making a payment.");
-        return;
-      }
+//  const handlePayment = async () => {
+//     if (!selected || addedProducts.length === 0) {
+//         alert("Please select a customer and add products before making a payment.");
+//         return;
+//       }
       
-    const payload = {
-        customer_name: selected.name,
-        store_email: userEmail,
-        user_email: userEmail,
-        total_price: grandTotal,
-        payment_type: selectedPaymentType,
-        products: addedProducts.map(product => ({
-            Productname: product.product_name,
-            Quantity: product.quantity,
-            SellPrice: product.retail_price
-        }))
-    };
+//     const payload = {
+//         customer_name: selected.name,
+//         store_email: userEmail,
+//         user_email: userEmail,
+//         total_price: grandTotal,
+//         payment_type: selectedPaymentType,
+//         products: addedProducts.map(product => ({
+//             Productname: product.product_name,
+//             Quantity: product.quantity,
+//             SellPrice: product.retail_price
+//         }))
+//     };
 
-    console.log("Payload to send:", payload);  // Log the payload
+//     console.log("Payload to send:", payload);  // Log the payload
 
-    try {
-        const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
-        console.log("Payment response:", response.data);
-    } catch (error) {
-        console.error("Error making payment:", error.response ? error.response.data : error.message);
+//     try {
+//         const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
+//         console.log("Payment response:", response.data);
+//     } catch (error) {
+//         console.error("Error making payment:", error.response ? error.response.data : error.message);
+//     }
+// };
+
+
+const handlePayment = async () => {
+  if (!selected || addedProducts.length === 0) {
+      toast.error("Please select a customer and add products before making a payment.");
+      return;
     }
+    
+  const payload = {
+      customer_name: selected.name,
+      store_email: userEmail,
+      user_email: userEmail,
+      total_price: grandTotal,
+      payment_type: selectedPaymentType,
+      products: addedProducts.map(product => ({
+          Productname: product.product_name,
+          Quantity: product.quantity,
+          SellPrice: product.retail_price
+      }))
+  };
+
+  console.log("Payload to send:", payload);  // Log the payload
+
+  try {
+      const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
+      console.log("Payment response:", response.data);
+
+      // Show a success toast when payment is successful
+      toast.success("Payment successful!");
+  } catch (error) {
+      console.error("Error making payment:", error.response ? error.response.data : error.message);
+
+      // Show an error toast when payment fails
+      toast.error("Payment failed. Please try again.");
+  }
 };
 
    // Filter customers based on the search query
@@ -129,6 +168,8 @@ export default function Example() {
 
   return (
     <div>
+
+      <ToastContainer />
       {/* Use a standard <label> element instead of <Label /> */}
       <label className="block font-medium text-gray-900">Search Customer</label>
 
@@ -275,12 +316,12 @@ export default function Example() {
 
       {/* Payment section */}
       <div className="mt-4">
-        <label htmlFor="paymentType">Payment Type</label>
+        <label htmlFor="paymentType p-2">Payment Type</label>
         <select
           id="paymentType"
           value={selectedPaymentType}
           onChange={(e) => setSelectedPaymentType(e.target.value)}
-          className="mt-2 mb-2 border border-gray-300 rounded-md"
+          className="mt-2 mb-2 border border-gray-300 rounded-md h-[2.5rem] px-2 ml-5"
         >
           <option value="">Select Payment Type</option>
           <option value="cash">Cash</option>

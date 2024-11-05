@@ -52,6 +52,7 @@ import bell from '../assets/Bell.svg'
 import refresh from '../assets/refresh.svg'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
+import Help from '../components/helpCenter'
 
 const navigation = [
   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
@@ -59,9 +60,9 @@ const navigation = [
   { name: 'Create Customer', href: '#', icon: UserCircleIcon, current: false },
   { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false },
   { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false },
-  // { name: 'Returned Products', href: '#', icon: NewspaperIcon, current: false },
   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
-  { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon, current: false },
+  // { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon, current: false },
+  { name: 'Help Center', href: '#', icon: NewspaperIcon, current: false },
 ];
 
 const userNavigation = [
@@ -110,8 +111,9 @@ export default function Example() {
         return <OverView />
       case 'Products':
         return <Stock />
-      case 'Help center':
-        return <Reports />
+      case 'Help Center':
+        return <Help />
+        // return <Reports />
       case 'Input Order':
         return <InputOrder />
       case 'Create Customer':

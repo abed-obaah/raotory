@@ -3,6 +3,8 @@ import VectorBG from '../../../../src/assets/Vector18.svg';
 import { BanknotesIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import axios from "axios"; // Import Axios
 import { useAuth } from '../../../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedCount, setSelectedRows, selectedInvoice, onRowSelection }) => {
     const { user } = useAuth();
@@ -33,7 +35,7 @@ const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedC
         if (selectedRows.length > 0) {
             try {
                 const storeEmail = userEmail;
-
+    
                 // Prepare the refund request payload, including the updated quantities
                 const refundRequests = selectedRows.map(productId => {
                     const productQuantity = updatedQuantities[productId] || selectedInvoice.quantity; // Use updated quantity if available
@@ -46,18 +48,22 @@ const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedC
                         quantity: productQuantity  // Include the quantity in the payload
                     };
                 });
-
+    
                 // Send the POST request to the backend
                 const response = await axios.post('https://raotory.com.ng/apis/refund.php', refundRequests);
                 
                 // Log the response on success
                 console.log('Response:', response.data);
+                // Show success toast on successful refund processing
+                toast.success('Refund processed successfully!'); // Notify the user of success
             } catch (error) {
                 console.error('Error processing refunds:', error);
-                alert('Failed to process refunds. Please try again.');
+                // Show error toast on failure
+                toast.error('Failed to process refunds. Please try again.'); // Notify the user of failure
             }
         } else {
-            alert('No items selected for refund');
+            // Show error toast if no items are selected for refund
+            toast.error('No items selected for refund');
         }
     };
 
@@ -89,6 +95,7 @@ const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedC
 
     return (
         <>
+        <ToastContainer />
             <div className="bg-blue-500 relative grid lg:grid-cols-4 overflow-hidden w-full h-full rounded-lg text-white bg-right bg-no-repeat px-10 py-5" style={{ backgroundImage: `url(${VectorBG})`, position: 'relative' }}>
                 <div className="h-full flex flex-col justify-center border-r-2 p-4 w-full">
                     <p className={`text-xs ${selectedInvoice?.status === 'Part Payment' ? 'bg-yellow-100' : ''} w-1/2 text-center px-1 py-1 text-blue-900 font-semibold`}>

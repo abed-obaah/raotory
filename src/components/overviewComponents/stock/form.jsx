@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import SelectedProducts from './selected';
 import { useAuth } from '../../../context/AuthContext';
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Form = () => {
     const { user } = useAuth();
@@ -55,23 +57,48 @@ const Form = () => {
     };
 
     // Function to handle submitting the products
+    // const handleStockUp = async () => {
+    //     if (selectedProducts.length === 0) {
+    //         alert("No products added yet.");
+    //         return;
+    //     }
+
+    //     try {
+    //         // Adjusted API endpoint and request payload
+    //         const response = await axios.post("https://raotory.com.ng/apis/addDrug.php", { drugs: selectedProducts });
+    //         console.log(response.data);
+
+    //         alert(response.data.message || "Products successfully stocked up!");
+
+    //         // Clear selected products after successful submission
+    //         setSelectedProducts([]);
+    //     } catch (error) {
+    //         console.error("There was an error adding the drugs!", error);
+    //         alert("There was an error submitting the products.");
+    //     }
+    // };
+
+
     const handleStockUp = async () => {
         if (selectedProducts.length === 0) {
-            alert("No products added yet.");
+            toast.error("No products added yet."); // Show error toast if no products are selected
             return;
         }
-
+    
         try {
             // Adjusted API endpoint and request payload
             const response = await axios.post("https://raotory.com.ng/apis/addDrug.php", { drugs: selectedProducts });
             console.log(response.data);
-            alert(response.data.message || "Products successfully stocked up!");
-
+            
+            // Show success toast on successful stocking up
+            toast.success(response.data.message || "Products successfully stocked up!");
+    
             // Clear selected products after successful submission
             setSelectedProducts([]);
         } catch (error) {
             console.error("There was an error adding the drugs!", error);
-            alert("There was an error submitting the products.");
+            // Show error toast on failure
+            toast.error("There was an error submitting the products.");
         }
     };
 
@@ -87,6 +114,7 @@ const Form = () => {
 
     return (
         <div className="flex justify-between mt-20">
+            <ToastContainer />
             <form className="w-2/3">
                 <input
                     type="text"

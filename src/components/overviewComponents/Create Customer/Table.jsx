@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../../../context/AuthContext'; 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Table = () => {
     const { user } = useAuth();
@@ -24,15 +26,30 @@ const Table = () => {
         }
     };
 
+    // const deleteCustomer = async (id) => {
+    //     try {
+    //         await axios.delete(`https://raotory.com.ng/apis/delete_user.php?id=${id}`);
+    //         fetchCustomers();
+    //     } catch (err) {
+    //         console.error(err);
+    //         setError('Error deleting customer');
+    //     }
+    // };
+
     const deleteCustomer = async (id) => {
         try {
-            await axios.delete(`https://raotory.com.ng/apis/delete_user.php?id=${id}`);
-            fetchCustomers();
+          await axios.delete(`https://raotory.com.ng/apis/delete_user.php?id=${id}`);
+          fetchCustomers();
+          toast.success('Customer deleted successfully!'); // Show success toast on customer deletion
         } catch (err) {
-            console.error(err);
-            setError('Error deleting customer');
+          console.error(err);
+          setError('Error deleting customer');
+          toast.error('Failed to delete customer. Please try again.'); // Show error toast on deletion failure
         }
-    };
+      };
+
+
+
 
     const updateCustomer = async () => {
         try {
@@ -65,6 +82,7 @@ const Table = () => {
 
     return (
         <div>
+            <ToastContainer />
             {error && <p className="text-red-500">{error}</p>}
             <table className="w-full p-8 border-collapse">
                 <thead className="bg-gray-100">

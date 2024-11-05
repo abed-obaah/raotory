@@ -33,7 +33,7 @@ import Settings from '../components/overviewComponents/settings/settings';
 import Inventory from '../components/overviewComponents/Inventory/inventory';
 import Invoice from '../components/overviewComponents/Invoice/invoice';
 import User from '../components/overviewComponents/settings/user'
-
+import Help from '../components/helpCenter'
 
 
 const navigation = [
@@ -72,6 +72,8 @@ export default function Example() {
                 setSelectedItem('General Settings')
             case 'General Settings':
                 return <Settings />;
+                case 'Help center':
+                    return <Help />
             case 'Users':
                 return <User />;
             default:
