@@ -6,20 +6,19 @@ import UserComponent from './UserComponent';
 import CogComponent from './CogComponent';
 import ChartBarComponent from './ChartBarComponent';
 import InvoiceTable from './InvoiceTable';
-import Chart from './Chart';
 import { useAuth } from '../context/AuthContext'; // Import the useAuth hook
 
 export default function Example() {
   const { user } = useAuth(); // Get user from AuthContext
   const userEmail = user?.email; // Get the email, if available
 
-  const [selectedComponent, setSelectedComponent] = useState(() => Chart);
-  const [salesCount, setSalesCount] = useState('0'); // Default value
-  const [todaySales, setTodaySales] = useState('NGN 00.00'); // Default today sales value
+  const [selectedComponent, setSelectedComponent] = useState(() => ChartBarComponent);
+  const [todaySales, setTodaySales] = useState('NGN 0.00'); // Default today sales value
   const [profitMade, setProfitMade] = useState('NGN 0.00'); // Initialize profit state
   const [totalProductsSold, setTotalProductsSold] = useState('0'); // New state for total products sold
   const [isLoading, setIsLoading] = useState(true);
   const [totalProductsCount, setTotalProductsCount] = useState(0);
+  const [totalInvoicesCount, setTotalInvoicesCount] = useState(0); 
 
   // Function to format date into YYYY-MM-DD
   const formatDate = (date) => {
@@ -28,35 +27,20 @@ export default function Example() {
 
   useEffect(() => {
     const fetchSalesData = async () => {
+      if (!userEmail) return; // Early return if userEmail is not available
+    
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}`);
+        const response = await fetch(`https://raotory.com.ng/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}&date=${formatDate(new Date())}`);
         const data = await response.json();
-        
-        console.log(data); // Log the entire response data for debugging
-
-        if (data.success) {
-          // Get the current date in YYYY-MM-DD format
-          const today = formatDate(new Date());
-
-          // Filter sales made today using `sold_date`
-          const todaySalesData = data.profits.filter(sale => {
-            const saleDate = formatDate(new Date(sale.sold_date));
-            return saleDate === today;
-          });
-
-          // Sum today's sales
-          const totalTodaySales = todaySalesData.reduce((total, sale) => total + sale.total_sales, 0);
-          setTodaySales(`NGN ${totalTodaySales.toFixed(2)}`); // Update today’s sales formatted as currency
-
-          // Set other state values (total profits, products count)
-          const totalProfits = data.profits.reduce((total, profit) => total + profit.profit_made, 0);
-          setProfitMade(`NGN ${totalProfits.toFixed(2)}`); // Update profit made
-
-          setTotalProductsCount(data.profits.length); // Set total number of products
-          setTotalProductsSold(data.total_products_sold || '0'); // Assuming your API returns this value
-        } else {
-          console.error('Failed to fetch sales data:', data.error);
-        }
+    
+        console.log('API Response:', data); // Log the entire response data for debugging
+    
+        // Directly extract values assuming the API always returns them
+        setTodaySales(data.products_sold_today ? ` ${data.products_sold_today}` : ' 0.00');
+        setProfitMade(data.total_profit ? `NGN ${data.total_profit}` : 'NGN 0.00');
+        setTotalProductsSold(data.total_products_sold ? `${data.total_products_sold}` : '0');
+        setTotalProductsCount(data.total_products_count || 0); // Assuming your API returns this value
+    
       } catch (err) {
         console.error('Error fetching sales data:', err);
       } finally {
@@ -64,9 +48,27 @@ export default function Example() {
       }
     };
 
-    if (userEmail) {
-      fetchSalesData(); // Call the function to fetch sales data if userEmail is available
-    }
+    const fetchInvoices = async () => {
+      if (!userEmail) return; 
+      try {
+        const response = await fetch(`https://raotory.com.ng/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
+        const data = await response.json();
+    
+        if (data.success) {
+          console.log('Invoices:', data.invoices);
+          // Handle displaying the invoices in your app
+          setTotalInvoicesCount(data.total_invoices); 
+        } else {
+          console.error('Error fetching invoices:', data.error);
+        }
+      } catch (error) {
+        console.error('Network error:', error);
+      }
+    };
+    
+
+    fetchSalesData(); // Call the function to fetch sales data
+    fetchInvoices()
   }, [userEmail]);
 
   const handleCardClick = (component) => {
@@ -78,7 +80,7 @@ export default function Example() {
       id: 1,
       icon: HomeIcon,
       backgroundColor: "bg-[#E7F8FC]",
-      amount: isLoading ? "Loading..." : todaySales,
+      amount: isLoading ? "Loading..." : todaySales, // Display today’s sales
       analytics: '20%',
       analyticsText: 'Than last month',
       description: "Today’s Sale",
@@ -88,17 +90,17 @@ export default function Example() {
       id: 2,
       icon: UserIcon,
       backgroundColor: "bg-[#F0E8FC]",
-      amount: isLoading ? "Loading..." : totalProductsCount, // Use total products count
+      amount: isLoading ? "Loading..." : totalInvoicesCount.toString(), // Use total invoices count
       analytics: '20%',
       analyticsText: 'Than last month',
-      description: "No of invoices issued", // Consider updating this description to be more relevant
+      description: "No of invoices issued",
       component: UserComponent
     },
     {
       id: 3,
       icon: CogIcon,
       backgroundColor: "bg-[#FCF3EC]",
-      amount: isLoading ? "Loading..." : profitMade,
+      amount: isLoading ? "Loading..." : profitMade, // Display profit made
       analytics: '20%',
       analyticsText: 'Than last month',
       description: "Profit made",
@@ -108,7 +110,7 @@ export default function Example() {
       id: 4,
       icon: ChartBarIcon,
       backgroundColor: "bg-[#FCE0EC]",
-      amount: isLoading ? "Loading..." : totalProductsSold, // Use fetched total products sold
+      amount: isLoading ? "Loading..." : totalProductsSold.toString(), // Display total products sold
       analytics: '20%',
       analyticsText: 'Than last month',
       description: "No of products sold",

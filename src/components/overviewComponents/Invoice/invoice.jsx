@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import VectorBG from '../../../../src/assets/Vector 18.svg';
+import VectorBG from '../../../../src/assets/Vector18.svg';
 import HeadImage from '../../../../src/assets/imager.svg';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import Table from './table';
@@ -69,31 +69,36 @@ const Invoice = () => {
     switch (tab) {
         case 'All':
             return All();
-        case "Data":
-            return <Data 
-                tab={tab} 
-                setTab={setTab} 
-                products={products} 
-                selectedCount={selectedCount} 
-                setSelectedCount={setSelectedCount} 
-                selectedRows={selectedRows} 
-                setSelectedRows={setSelectedRows} 
-                selectedInvoice={selectedInvoice} 
-            />;
+            case "Data":
+                return (
+                    <Data 
+                        tab={tab} 
+                        setTab={setTab} 
+                        products={products} 
+                        selectedCount={selectedCount} 
+                        setSelectedCount={setSelectedCount} 
+                        selectedRows={selectedRows} 
+                        setSelectedRows={setSelectedRows} 
+                        selectedInvoice={selectedInvoice}  // Pass the selected invoice
+                    />
+                );
+            
         case 'Refund':
-            return <Refund 
-                tab={tab} 
-                setTab={setTab} 
-                products={products} 
-                selectedCount={selectedCount} 
-                setSelectedCount={setSelectedCount} 
-                selectedRows={selectedRows} 
-                setSelectedRows={setSelectedRows} 
-                setSelectedInvoice={setSelectedInvoice} 
-                selectedInvoice={selectedInvoice} // Pass the selectedInvoice to the Refund component
-            />;
+            return (
+                <Refund 
+                    tab={tab} 
+                    setTab={setTab} 
+                    products={products} 
+                    selectedCount={selectedCount} 
+                    setSelectedCount={setSelectedCount} 
+                    selectedRows={selectedRows} 
+                    setSelectedRows={setSelectedRows} 
+                    setSelectedInvoice={setSelectedInvoice} 
+                    selectedInvoice={selectedInvoice} 
+                />
+            );
         default:
-            return null; // or some fallback UI
+            return <div className="text-center">No invoices available. Please select a tab to view invoices.</div>;
     }
 };
 

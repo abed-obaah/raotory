@@ -43,6 +43,7 @@ import { useAuth } from '../context/AuthContext'
 import InputOrder from '../components/overviewComponents/input order/inputOrder'
 import Customer from '../components/overviewComponents/Create Customer/createCustomer'
 import Stock from '../components/overviewComponents/stock/stock'
+import Returned from '../components/overviewComponents/stock/returned'
 import Settings from '../components/overviewComponents/settings/settings'
 import Inventory from '../components/overviewComponents/Inventory/inventory'
 import Invoice from '../components/overviewComponents/Invoice/invoice'
@@ -58,6 +59,7 @@ const navigation = [
   { name: 'Create Customer', href: '#', icon: UserCircleIcon, current: false },
   { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false },
   { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false },
+  // { name: 'Returned Products', href: '#', icon: NewspaperIcon, current: false },
   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
   { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon, current: false },
 ];
@@ -106,7 +108,7 @@ export default function Example() {
     switch (selectedItem) {
       case 'Overview':
         return <OverView />
-      case 'Product':
+      case 'Products':
         return <Stock />
       case 'Help center':
         return <Reports />
@@ -116,6 +118,8 @@ export default function Example() {
         return <Customer />
       case 'Stock Products':
         return <Stock />
+        case 'Returned Products':
+          return <Returned />
       case 'Invoice':
         return <Invoice />
       case 'Inventory':
@@ -242,7 +246,7 @@ export default function Example() {
                                                                         General
                                                                     </a>
                                                                 </li>
-                                                                <li>
+                                                                {/* <li>
                                                                     <a
                                                                         href="#"
                                                                         onClick={() => setSelectedItem('Users')}
@@ -250,7 +254,7 @@ export default function Example() {
                                                                     >
                                                                         Users
                                                                     </a>
-                                                                </li>
+                                                                </li> */}
 
                                                             </ul>
                                                         )}
@@ -357,7 +361,7 @@ export default function Example() {
                                                                 General
                                                             </a>
                                                         </li>
-                                                        <li>
+                                                        {/* <li>
                                                             <a
                                                                 href="#"
                                                                 onClick={() => setSelectedItem('Users')}
@@ -365,7 +369,7 @@ export default function Example() {
                                                             >
                                                                 Users
                                                             </a>
-                                                        </li>
+                                                        </li> */}
 
                                                     </ul>
                                                 )}

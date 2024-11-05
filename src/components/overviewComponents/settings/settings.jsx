@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import VectorBG from '../../../../src/assets/Vector 18.svg';
+import VectorBG from '../../../../src/assets/Vector18.svg';
 import { BanknotesIcon, PrinterIcon, MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 const Settings = () => {

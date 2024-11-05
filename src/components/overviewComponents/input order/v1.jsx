@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from './TableComp';
 import { useAuth } from '../../../context/AuthContext'; 
 import axios from 'axios';
-import VectorBG from '../../../../src/assets/Vector 18.svg';
+import VectorBG from '../../../../src/assets/Vector18.svg';
 
 const InputOrder = () => {
     const { user } = useAuth();

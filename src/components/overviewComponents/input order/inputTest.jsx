@@ -3,7 +3,7 @@ import Table from './TableComp';
 import Table1 from './tablev1';
 import { useAuth } from '../../../context/AuthContext'; 
 import axios from 'axios';
-import VectorBG from '../../../../src/assets/Vector 18.svg';
+import VectorBG from '../../../../src/assets/Vector18.svg';
 
 const InputOrder = () => {
     const { user } = useAuth();

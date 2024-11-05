@@ -130,7 +130,7 @@ export default function Example() {
   return (
     <div>
       {/* Use a standard <label> element instead of <Label /> */}
-      <label className="block font-medium text-gray-900">Search Drugs</label>
+      <label className="block font-medium text-gray-900">Search Customer</label>
 
       <input
         type="text"

@@ -5,6 +5,8 @@ import axios from "axios";
 
 const Form = () => {
     const { user } = useAuth();
+
+    // Initialize form data
     const [formData, setFormData] = useState({
         productName: '',
         quantity: '',
@@ -16,8 +18,10 @@ const Form = () => {
         userEmail: user?.email || ""
     });
 
-    const [selectedProducts, setSelectedProducts] = useState([]); // List of selected products
+    // State to hold selected products
+    const [selectedProducts, setSelectedProducts] = useState([]); 
 
+    // Function to handle input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -26,8 +30,10 @@ const Form = () => {
         }));
     };
 
+    // Check if all fields are filled
     const allFieldsFilled = Object.values(formData).every(value => value !== '');
 
+    // Function to handle adding a product
     const handleAddProduct = () => {
         if (allFieldsFilled) {
             setSelectedProducts(prevProducts => [...prevProducts, formData]);
@@ -48,20 +54,19 @@ const Form = () => {
         }
     };
 
+    // Function to handle submitting the products
     const handleStockUp = async () => {
         if (selectedProducts.length === 0) {
             alert("No products added yet.");
             return;
         }
-    
-        console.log("test of selected products:",selectedProducts); // Debugging line
-    
+
         try {
             // Adjusted API endpoint and request payload
             const response = await axios.post("https://raotory.com.ng/apis/addDrug.php", { drugs: selectedProducts });
             console.log(response.data);
             alert(response.data.message || "Products successfully stocked up!");
-    
+
             // Clear selected products after successful submission
             setSelectedProducts([]);
         } catch (error) {
@@ -69,7 +74,17 @@ const Form = () => {
             alert("There was an error submitting the products.");
         }
     };
-    
+
+    // Calculate the minimum expiration date (one month ahead)
+    const getMinExpirationDate = () => {
+        const today = new Date();
+        today.setMonth(today.getMonth() + 1); // Move one month ahead
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Add leading 0 if needed
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     return (
         <div className="flex justify-between mt-20">
             <form className="w-2/3">
@@ -130,6 +145,7 @@ const Form = () => {
                     placeholder="Expiration date"
                     value={formData.expirationDate}
                     onChange={handleInputChange}
+                    min={getMinExpirationDate()} // Set the minimum expiration date to 1 month ahead
                 />
                 {allFieldsFilled ?
                     <button
