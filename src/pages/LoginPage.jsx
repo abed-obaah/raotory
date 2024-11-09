@@ -17,18 +17,18 @@ export default function Example() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       const response = await axios.post('https://raotory.com.ng/apis/login.php', {
         email,
         password
       });
-
+  
       if (response.data.status === "success") {
         setMessage(response.data.message);
         const userDetails = response.data.user;
         console.log("User Details:", userDetails);
-        login(userDetails); // Store user details in context
+        login(userDetails); // Store user details in context and localStorage
         navigate('/dashboard');
       } else {
         setMessage(response.data.message);
@@ -40,6 +40,7 @@ export default function Example() {
       setLoading(false);
     }
   };
+  
 
   return (
     <>

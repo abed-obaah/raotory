@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '../../../context/AuthContext';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const Table = ({ tab, setTab, setSelectedInvoice }) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
     const itemsPerPage = 5; // Limit to 5 items per page
     const { user } = useAuth();
     const userEmail = user?.email;
@@ -30,9 +32,9 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                         date: invoice.sales_date,
                         amount: `NGN ${parseFloat(invoice.paid_amount).toFixed(2)}`,
                         status: invoice.sales_status,
-                        total_price: invoice.total_price, // Ensure this data is available
-                        paid: invoice.paid, // Ensure this data is available
-                        products: invoice.products, // Assuming this is part of the data
+                        total_price: invoice.total_price,
+                        paid: invoice.paid,
+                        products: invoice.products,
                     }));
                     setInvoices(formattedInvoices);
                 } else {
@@ -47,7 +49,7 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
     }, [userEmail]);
 
     const handleNextPage = () => {
-        if (currentPage < Math.ceil(invoices.length / itemsPerPage)) {
+        if (currentPage < Math.ceil(filteredInvoices.length / itemsPerPage)) {
             setCurrentPage(prevPage => prevPage + 1);
         }
     };
@@ -58,16 +60,10 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
         }
     };
 
-    // const handleClick = (invoice) => {
-    //     setSelectedInvoice(invoice); // Pass the selected invoice to the parent component
-    //     setTab('Data'); // Change the tab to 'Data'
-    // };
-
-
     const handleClick = (invoice) => {
-        console.log('Selected Invoice:', invoice); // Check if this logs the correct invoice
-        setSelectedInvoice(invoice); // Set the selected invoice
-        setTab('Data'); // Change the tab to 'Data'
+        console.log('Selected Invoice:', invoice);
+        setSelectedInvoice(invoice);
+        setTab('Data');
     };
 
     const Type = (status) => {
@@ -89,36 +85,66 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
         );
     };
 
+    // Filter invoices based on search term
+    const filteredInvoices = invoices.filter(invoice =>
+        invoice.customer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const indexOfLastInvoice = currentPage * itemsPerPage;
     const indexOfFirstInvoice = indexOfLastInvoice - itemsPerPage;
-    const currentInvoices = invoices.slice(indexOfFirstInvoice, indexOfLastInvoice);
+    const currentInvoices = filteredInvoices.slice(indexOfFirstInvoice, indexOfLastInvoice);
 
     return (
         <>
-            <table className="w-full mt-9">
-                <thead>
-                    <tr>
-                        {thead.map((th, index) => (
-                            <th key={index} className="text-gray-400 font-semibold text-left">{th}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentInvoices.map((invoice, index) => (
-                        <tr key={index} className="text-left rounded-lg text-blue-900 font-semibold">
-                            <td className="mb-5 h-10">{invoice.customer}</td>
-                            <td>{invoice.id}</td>
-                            <td>{invoice.product_name}</td>
-                            {Type(invoice.status || "Unknown")}
-                            <td className="text-center">
-                                <button className="border bg-blue-600 px-7 py-1 text-white rounded" onClick={() => handleClick(invoice)}>
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="container mx-auto p-6 ">
+                <div className="flex items-center mt-5">
+                    <MagnifyingGlassIcon className="h-5 w-5 text-gray-500 absolute ml-2" />
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full border rounded-lg p-3 pl-10"
+                        placeholder="Search by customer name"
+                        style={{ backgroundColor: 'white', color: 'black' }}
+                    />
+                </div>
+                {/* Header Section */}
+                <div className="table-header flex p-3 font-semibold text-gray-500">
+                    <div className="w-1/4">Customer Name</div>
+                    <div className="w-1/4">Invoice Number</div>
+                    <div className="w-1/4">Sales Type</div>
+                    <div className="w-1/4 flex justify-between items-center">
+                        <span>Status</span>
+                        <span>Action</span>
+                    </div>
+                </div>
+
+                {/* Invoice Rows */}
+                {currentInvoices.map(invoice => (
+                    <div key={invoice.id} className="invoice-row flex items-center p-3 border-2 mb-5 rounded-lg border-gray-200 bo">
+                        <div className="w-1/4 flex items-center">
+                            <div className="avatar w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold">
+                                {invoice.customer[0]}
+                            </div>
+                            <span className="ml-3 font-semibold text-gray-900">{invoice.customer}</span>
+                        </div>
+                        <div className="w-1/4 text-gray-900">#B2A{invoice.id}</div>
+                        <div className="w-1/4 text-gray-900">{invoice.product_name}</div>
+                        <div className="w-1/4 flex items-center justify-between">
+                            <span className={`status-badge px-3 py-1 rounded-full ${
+                                invoice.status === 'Paid' ? 'bg-green-100 text-green-600' :
+                                invoice.status === 'Credit' ? 'bg-red-100 text-red-600' :
+                                'bg-yellow-100 text-yellow-600'
+                            }`}>
+                                {invoice.status}
+                            </span>
+                            <button className="view-btn bg-blue-500 text-white px-4 py-2 rounded-lg" onClick={() => handleClick(invoice)}>
+                                View
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
             {/* Pagination controls */}
             <div className="flex justify-between mt-4">
@@ -129,11 +155,11 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                 >
                     Previous
                 </button>
-                <span className="px-4 py-2">{`Page ${currentPage} of ${Math.ceil(invoices.length / itemsPerPage)}`}</span>
+                <span className="px-4 py-2">{`Page ${currentPage} of ${Math.ceil(filteredInvoices.length / itemsPerPage)}`}</span>
                 <button 
-                    className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${currentPage === Math.ceil(invoices.length / itemsPerPage) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${currentPage === Math.ceil(filteredInvoices.length / itemsPerPage) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={handleNextPage}
-                    disabled={currentPage === Math.ceil(invoices.length / itemsPerPage)}
+                    disabled={currentPage === Math.ceil(filteredInvoices.length / itemsPerPage)}
                 >
                     Next
                 </button>

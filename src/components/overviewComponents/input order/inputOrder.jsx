@@ -122,6 +122,25 @@ export default function Example() {
     }
   };
 
+  const handleSellingPriceChange = (index, newPrice) => {
+    // Create a copy of the current products
+    const updatedProducts = [...addedProducts];
+    
+    // Update the price of the specific product at the given index
+    updatedProducts[index].retail_price = newPrice;
+  
+    // Recalculate the total for the updated product
+    updatedProducts[index].total = updatedProducts[index].retail_price * updatedProducts[index].quantity;
+  
+    // Update the state with the new array
+    setAddedProducts(updatedProducts);
+  
+    // Recalculate the grand total
+    const newGrandTotal = updatedProducts.reduce((sum, product) => sum + product.total, 0);
+    setGrandTotal(newGrandTotal);
+  };
+  
+
   // Function to handle payment
 //  const handlePayment = async () => {
 //     if (!selected || addedProducts.length === 0) {
@@ -202,6 +221,27 @@ const handleRemoveProduct = (index) => {
   // Optionally recalculate the grand total after the removal
   const newTotal = updatedProducts.reduce((sum, product) => sum + (product.retail_price * product.quantity), 0);
   setGrandTotal(newTotal);
+};
+
+const handleQuantityChange = (index, newQuantity) => {
+  // Ensure the new quantity is a positive number
+  const updatedQuantity = newQuantity > 0 ? newQuantity : 1;
+
+  // Create a copy of the current products
+  const updatedProducts = [...addedProducts];
+
+  // Update the quantity of the specific product at the given index
+  updatedProducts[index].quantity = updatedQuantity;
+
+  // Recalculate the total for the updated product
+  updatedProducts[index].total = updatedProducts[index].retail_price * updatedQuantity;
+
+  // Update the state with the new array
+  setAddedProducts(updatedProducts);
+
+  // Recalculate the grand total
+  const newGrandTotal = updatedProducts.reduce((sum, product) => sum + product.total, 0);
+  setGrandTotal(newGrandTotal);
 };
 
 
@@ -347,50 +387,66 @@ const handleRemoveProduct = (index) => {
 
       {/* Display added products */}
       <div className="mt-9">
-    <table className="w-full">
-        <thead className="bg-customColor text-white h-12">
-            <tr>
-                <th className="border bg-customColor w-1/9 font-normal">N/O</th>
-                <th className="border bg-customColor w-1/5 font-normal">Product Name</th>
-                <th className="border bg-customColor w-1/5 font-normal">Cost Price</th>
-                <th className="border bg-customColor w-1/5 font-normal">Selling Price</th>
-                <th className="border bg-customColor w-auto font-normal">Quantity</th>
-                <th className="border bg-customColor w-1/5 font-normal">Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {addedProducts.map((product, index) => (
-                <tr key={index} className="border text-gray-400">
-                    <td className="border p-3">{index + 1}</td>
-                    <td className="border p-3">{product.product_name}</td>
-                    <td className="border p-3">NGN{product.retail_price}</td>
-                    <td className="border p-3" style={{ color: "black", opacity: '.8' }}>NGN{product.retail_price}</td>
-                    <td className="border p-3 w-auto">
-                        <input
-                            type="number"
-                            value={product.quantity}
-                            onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 0)}
-                            style={{ color: "white" }}
-                            className="w-full bg-gray-400 p-1 align-items"
-                        />
-                    </td>
-                    <td className="border p-3 flex justify-between">
-                        NGN{product.retail_price * product.quantity}
-                        <div
-                            className="bg-red-300 p-2 rounded-full cursor-pointer"
-                            onClick={() => handleRemoveProduct(index)}  // Call the remove function
-                        >
-                            <TrashIcon height='20px' color="red" />
-                        </div>
-                    </td>
-                </tr>
-            ))}
-            <tr>
-                <td colSpan="5" className="border p-3 font-bold">Total</td>
-                <td className="border p-3 bg-gray-200">NGN{grandTotal}</td>
-            </tr>
-        </tbody>
-    </table>
+      <table className="w-full">
+                <thead className="bg-customColor text-white h-12">
+                    <tr>
+                        <th className="border bg-customColor w-1/9 font-normal">N/O</th>
+                        <th className="border bg-customColor w-1/5 font-normal">Product Name</th>
+                        <th className="border bg-customColor w-1/5 font-normal">Cost Price</th>
+                        <th className="border bg-customColor w-1/5 font-normal">Selling Price</th>
+                        <th className="border bg-customColor w-auto font-normal">Quantity</th>
+                        <th className="border bg-customColor w-1/5 font-normal">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {addedProducts.map((product, index) => (
+                        <tr key={index} className="border text-gray-400">
+                            <td className="border p-3">{index + 1}</td>
+                            <td className="border p-3">{product.product_name}</td>
+                            <td className="border p-3">NGN{product.retail_price}</td>
+                            <td className="border p-3" style={{ color: "black", opacity: '.8' }}>
+                            <input
+                                type="number"
+                                value={product.retail_price}
+                                onChange={(e) => handleSellingPriceChange(index, parseInt(e.target.value) || 0)}
+                                style={{ color: "black" }}
+                                className="w-full bg-gray-400 p-1 align-items"
+                              />
+                            </td>
+                            <td className="border p-3 w-auto">
+                                {/* <input
+                                    type="number"
+                                    value={product.quantity}
+                                    onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 0)}
+                                    style={{ color: "white" }}
+                                    className="w-full bg-gray-400 p-1 align-items"
+                                /> */}
+
+                                  <input
+                                    type="number"
+                                    value={product.quantity}
+                                    onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 1)} // Default to 1 if input is invalid
+                                    style={{ color: "white" }}
+                                    className="w-full bg-gray-400 p-1 align-items"
+                                  />
+                            </td>
+                            <td className="border p-3 flex justify-between">
+                                NGN{product.retail_price * product.quantity} {/* Update total based on the new price */}
+                                <div
+                                    className="bg-red-300 p-2 rounded-full cursor-pointer"
+                                    onClick={() => handleRemoveProduct(index)}  // Call the remove function
+                                >
+                                    <TrashIcon height="20px" color="red" />
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                    <tr>
+                        <td colSpan="5" className="border p-3 font-bold">Total</td>
+                        <td className="border p-3 bg-gray-200">NGN{grandTotal}</td>
+                    </tr>
+                </tbody>
+            </table>
 </div>
 
 

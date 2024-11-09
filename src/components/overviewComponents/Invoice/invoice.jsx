@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import VectorBG from '../../../../src/assets/Vector18.svg';
 import HeadImage from '../../../../src/assets/imager.svg';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+
 import Table from './table';
 import Data from './Data';
 import Refund from './ProcessRefunds';
@@ -48,15 +48,7 @@ const Invoice = () => {
                     </form>
                     <img src={HeadImage} alt="" className="absolute right-9 top-6" />
                 </div>
-                <div className="flex items-center mt-5">
-                    <MagnifyingGlassIcon className="h-5 w-5 text-gray-500 absolute ml-2" />
-                    <input
-                        type="text"
-                        className="w-full border rounded-lg p-3 pl-10"
-                        placeholder="Search by customer name"
-                        style={{ backgroundColor: 'white', color: 'black' }}
-                    />
-                </div>
+                
                 <Table 
                     tab={tab} 
                     setTab={setTab} 
