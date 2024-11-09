@@ -4,12 +4,12 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Field, Label, Switch } from '@headlessui/react'
 
 export default function Example() {
-  const [agreed, setAgreed] = useState(false)
+  // const [agreed, setAgreed] = useState(false)
   const [message, setMessage] = useState('') // State for the message
 
   const handleSubmit = (e) => {
     e.preventDefault() // Prevent default form submission
-    if (agreed && message.trim() !== '') {
+    if (message.trim() !== '') {
       // Construct the WhatsApp URL
       const phoneNumber = '+2347066261059';
       const encodedMessage = encodeURIComponent(message); // Encode the message
@@ -18,7 +18,14 @@ export default function Example() {
       // Open the WhatsApp URL
       window.open(whatsappUrl, '_blank'); // Opens in a new tab
     } else {
-      alert('Please agree to the policies and enter a message.'); // Basic validation
+      // alert('Please agree to the policies and enter a message.'); // Basic validation
+      // Construct the WhatsApp URL
+      const phoneNumber = '+2347066261059';
+      const encodedMessage = encodeURIComponent(message); // Encode the message
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+      // Open the WhatsApp URL
+      window.open(whatsappUrl, '_blank'); // Opens in a new tab
     }
   }
 

@@ -1,7 +1,7 @@
 import React from "react";
+import { TrashIcon } from '@heroicons/react/24/solid'; // You can use react-icons for the trash icon
 
-const SelectedProducts = ({ products, onStockUp }) => { // Receive products and onStockUp as props
-
+const SelectedProducts = ({ products, onStockUp, onRemoveProduct }) => {
     return (
         <section className="border w-1/4 p-2 display-inline rounded-lg overflow-y-scroll" style={{ height: '80vh' }}>
             <h2 className="pl-3">Selected Products</h2>
@@ -16,17 +16,22 @@ const SelectedProducts = ({ products, onStockUp }) => { // Receive products and 
                                 <p className="text-normal">{product.productName} <span>x {product.quantity}</span></p>
                                 <p className="text-xs text-gray-400">Expires: {product.expirationDate}</p>
                                 <p className="text-xs text-gray-400">Batch Number: {product.batchNumber}</p>
-                                {/* <p className="text-xs text-gray-400">Wholesale Price: {product.wholesalePrice}</p>
-                                <p className="text-xs text-gray-400">Purchase Price: {product.purchasePrice}</p>
-                                <p className="text-xs text-gray-400">Quantity: {product.quantity}</p> */}
                             </div>
-                            <p className="text-normal">NGN {product.retailPrice}</p>
+                            <div className="flex items-center">
+                                <p className="text-normal mr-4">NGN {product.retailPrice}</p>
+                                {/* Add the trash icon and bind the remove product function */}
+                                <button onClick={() => onRemoveProduct(index)} className="text-red-600">
+                                    <TrashIcon className="w-5 h-5 cursor-pointer text-red-500 hover:text-red-700" />
+                                </button>
+                            </div>
                         </div>
                     ))
                 )}
             </div>
 
-            <button className="border bg-blue-500 rounded-lg p-3 text-white w-full" onClick={onStockUp}>Stock Up</button>
+            <button className="border bg-[#0E90DA] rounded-lg p-3 text-white w-full" onClick={onStockUp}>
+                Stock Up
+            </button>
         </section>
     );
 };

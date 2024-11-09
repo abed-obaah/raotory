@@ -57,7 +57,7 @@ import Help from '../components/helpCenter'
 const navigation = [
   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
   { name: 'Input Order', href: '#', icon: ShoppingCartIcon , current: false },
-  { name: 'Create Customer', href: '#', icon: UserCircleIcon, current: false },
+  { name: 'Create Customers', href: '#', icon: UserCircleIcon, current: false },
   { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false },
   { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false },
   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
@@ -116,7 +116,7 @@ export default function Example() {
         // return <Reports />
       case 'Input Order':
         return <InputOrder />
-      case 'Create Customer':
+      case 'Create Customers':
         return <Customer />
       case 'Stock Products':
         return <Stock />
@@ -297,127 +297,146 @@ export default function Example() {
             </div>
 
             <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                <li>
-                <ul role="list" className="-mx-2 space-y-1">
-                                        {navigation.map((item) => (
-                                            <li key={item.name}>
-                                                <a
-                                                    href={item.href}
-                                                    onClick={item.name === 'Products' ? handleProductClick : item.name === 'Settings' ? handleSettingsClick : () => setSelectedItem(item.name)}
-                                                    className={classNames(
-                                                        item.name === selectedItem
-                                                            ? 'bg-[#E5FFF0] text-[#444444]'
-                                                            : 'text-indigo-200 hover:bg-[#E5FFF0] hover:text-[#444444]',
-                                                        'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-                                                    )}
-                                                >
-                                                    <item.icon
-                                                        aria-hidden="true"
-                                                        className={classNames(
-                                                            item.name === selectedItem ? 'text-black' : 'text-indigo-200 group-hover:text-white',
-                                                            'h-6 w-6 shrink-0',
-                                                        )}
-                                                    />
-                                                    {item.name}
-                                                </a>
-                                                {item.name === 'Products' && productsOpen && (
-                                                    <ul className="pl-8 mt-2 space-y-1">
-                                                        <li>
-                                                            <a
-                                                                href="#"
-                                                                onClick={() => setSelectedItem('Stock Products')}
-                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
-                                                            >
-                                                                Stock Products
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a
-                                                                href="#"
-                                                                onClick={() => setSelectedItem('Returned Products')}
-                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
-                                                            >
-                                                                Returned Products
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a
-                                                                href="#"
-                                                                onClick={() => setSelectedItem('Inventory')}
-                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
-                                                            >
-                                                                Inventory
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                )}
-                                                {item.name === 'Settings' && settingsOpen && (
-                                                    <ul className="pl-8 mt-2 space-y-1">
-                                                        <li>
-                                                            <a
-                                                                href="#"
-                                                                onClick={() => setSelectedItem('General Settings')}
-                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
-                                                            >
-                                                                General
-                                                            </a>
-                                                        </li>
-                                                        {/* <li>
-                                                            <a
-                                                                href="#"
-                                                                onClick={() => setSelectedItem('Users')}
-                                                                className="block p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded"
-                                                            >
-                                                                Users
-                                                            </a>
-                                                        </li> */}
+      <ul role="list" className="flex flex-1 flex-col gap-y-7">
+        <li>
+          <ul role="list" className="-mx-2 space-y-1">
+            {navigation.map((item) => {
+              const isPaid = user && user.paid_status === "1"; // Check if the user has paid status of "1"
+              const isDisabled = !isPaid && item.name !== 'Overview'; // Disable other items if not paid
 
-                                                    </ul>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                </li>
-                <li className="mt-auto">
-                  <Field className="-mx-2 flex items-center justify-between rounded-lg bg-gray-50 px-2 py-3 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                    <div className="flex items-center">
-                      <MoonIcon
-                        aria-hidden="true"
-                        className="h-6 w-6 shrink-0 text-[#001B2A] group-hover:text-indigo-600"
-                      />
-                      <Label as="span" className="ml-10 text-sm">
-                        <span className="font-medium text-gray-900">Dark Mode</span>
-                      </Label>
-                    </div>
-                    <Switch
-                      checked={enabled}
-                      onChange={setEnabled}
-                      className="group relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#9CA0B2] transition-colors duration-200 ease-in-out data-[checked]:bg-indigo-600"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out group-data-[checked]:translate-x-4"
-                      />
-                    </Switch>
-                  </Field>
-
-
+              return (
+                <li key={item.name}>
                   <a
-                    href="#"
-                    onClick={() => setOpen(true)} // Open the modal when clicked
-                    className="group mt-5 -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-[#CA0000] hover:bg-gray-50 hover:text-indigo-600"
+                    href={isDisabled ? '#' : item.href} // Disable the href if the item is disabled
+                    onClick={
+                      isDisabled
+                        ? (e) => e.preventDefault() // Prevent click if the item is disabled
+                        : item.name === 'Products'
+                        ? handleProductClick
+                        : item.name === 'Settings'
+                        ? handleSettingsClick
+                        : () => setSelectedItem(item.name)
+                    }
+                    className={classNames(
+                      item.name === selectedItem
+                        ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]'
+                        : isDisabled
+                        ? 'text-gray-400 cursor-not-allowed' // Add disabled styles
+                        : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2 ',
+                      'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                    )}
+                    aria-disabled={isDisabled}
                   >
-                    <Cog6ToothIcon
+                    <item.icon
                       aria-hidden="true"
-                      className="h-6 w-6 shrink-0 text-[#CA0000] group-hover:text-indigo-600"
+                      className={classNames(
+                        item.name === selectedItem
+                          ? 'text-[#0E90DA]'
+                          : isDisabled
+                          ? 'text-gray-400' // Add disabled icon color
+                          : 'text-indigo-200 group-hover:text-white',
+                        'h-6 w-6 shrink-0',
+                      )}
                     />
-                    Logout
+                    {item.name}
                   </a>
+
+                  {item.name === 'Products' && productsOpen && !isDisabled && (
+                      <ul className="pl-8 mt-2 space-y-1">
+                        <li>
+                          <a
+                            href="#"
+                            onClick={() => setSelectedItem('Stock Products')}
+                            className={`block p-2 text-sm hover:bg-indigo-50 rounded ${
+                              selectedItem === 'Stock Products' ? 'text-[#0E90DA]' : 'text-gray-400'
+                            }`}
+                          >
+                            Stock Products
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="#"
+                            onClick={() => setSelectedItem('Returned Products')}
+                            className={`block p-2 text-sm hover:bg-indigo-50 rounded ${
+                              selectedItem === 'Returned Products' ? 'text-[#0E90DA]' : 'text-gray-400'
+                            }`}
+                          >
+                            Returned Products
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="#"
+                            onClick={() => setSelectedItem('Inventory')}
+                            className={`block p-2 text-sm hover:bg-indigo-50 rounded ${
+                              selectedItem === 'Inventory' ? 'text-[#0E90DA]' : 'text-gray-400'
+                            }`}
+                          >
+                            Inventory
+                          </a>
+                        </li>
+                      </ul>
+                    )}
+
+
+                  {item.name === 'Settings' && settingsOpen && !isDisabled && (
+                    <ul className="pl-8 mt-2 space-y-1">
+                      <li>
+                        <a
+                          href="#"
+                          onClick={() => setSelectedItem('General Settings')}
+                          className="block p-2 text-sm text-gray-400 hover:bg-indigo-50 rounded"
+                        >
+                          General
+                        </a>
+                      </li>
+                    </ul>
+                  )}
                 </li>
-              </ul>
-            </nav>
+              );
+            })}
+          </ul>
+        </li>
+
+        {/* Dark mode and Logout */}
+        <li className="mt-auto">
+          <Field className="-mx-2 flex items-center justify-between rounded-lg bg-gray-50 px-2 py-3 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+            <div className="flex items-center">
+              <MoonIcon
+                aria-hidden="true"
+                className="h-6 w-6 shrink-0 text-[#001B2A] group-hover:text-indigo-600"
+              />
+              <Label as="span" className="ml-10 text-sm">
+                <span className="font-medium text-gray-900">Dark Mode</span>
+              </Label>
+            </div>
+            <Switch
+              checked={enabled}
+              onChange={setEnabled}
+              className="group relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#9CA0B2] transition-colors duration-200 ease-in-out data-[checked]:bg-indigo-600"
+            >
+              <span
+                aria-hidden="true"
+                className="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out group-data-[checked]:translate-x-4"
+              />
+            </Switch>
+          </Field>
+
+          <a
+            href="#"
+            onClick={() => setOpen(true)} // Open the modal when clicked
+            className="group mt-5 -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-[#CA0000] hover:bg-gray-50 hover:text-indigo-600"
+          >
+            <Cog6ToothIcon
+              aria-hidden="true"
+              className="h-6 w-6 shrink-0 text-[#CA0000] group-hover:text-indigo-600"
+            />
+            Logout
+          </a>
+        </li>
+      </ul>
+    </nav>
           </div>
         </div>
 

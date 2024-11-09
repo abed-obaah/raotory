@@ -20,6 +20,7 @@ const Table = () => {
                 params: { email: user?.email },
             });
             setCustomers(response.data.users);
+            
         } catch (err) {
             console.error(err);
             setError('Error fetching customers');
@@ -107,9 +108,9 @@ const Table = () => {
                                 </td>
                                 <td className="p-3 flex bg-white">
                                     {person.location}
-                                    <div className="btns flex w-1/2">
+                                    <div className="btns flex w-1/2 ml-20 space-x-10">
                                         <button
-                                            className="bg-blue-500 p-1 text-white w-full rounded-lg ml-5"
+                                            className="bg-[#0E90DA] p-1 text-white w-full rounded-lg ml-5"
                                             onClick={() => handleModify(person)} 
                                         >
                                             Modify
@@ -146,7 +147,7 @@ const Table = () => {
                             >
                                 <div className="sm:flex sm:items-start">
                                     <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                                        <ExclamationTriangleIcon aria-hidden="true" className="h-6 w-6 text-blue-600" />
+                                        <ExclamationTriangleIcon aria-hidden="true" className="h-6 w-6 text-[#0E90DA]" />
                                     </div>
                                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                         <DialogTitle as="h3" className="text-base font-semibold leading-6 text-gray-900">
@@ -197,14 +198,14 @@ const Table = () => {
                                 <div className="mt-5 sm:mt-6">
                                     <button
                                         type="button"
-                                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:text-sm"
+                                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-[#0E90DA] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-[#0E90DA] focus:ring-offset-2 sm:text-sm"
                                         onClick={updateCustomer} // Call update function here
                                     >
                                         Save
                                     </button>
                                     <button
                                         type="button"
-                                        className="mt-2 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:text-sm"
+                                        className="mt-2 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#0E90DA] focus:ring-offset-2 sm:text-sm"
                                         onClick={() => setOpen(false)}
                                     >
                                         Cancel

@@ -3,6 +3,7 @@ import VectorBG from '../../../../src/assets/Vector18.svg';
 import { BanknotesIcon, PrinterIcon, MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../../context/AuthContext'; 
 
 const Settings = () => {
     // State to manage editable fields and user details
@@ -17,12 +18,14 @@ const Settings = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [store, setStore_type] = useState('');
+    const { user } = useAuth();
+    const userEmail = user?.email;
 
     // Fetch user details when the component mounts
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch('https://raotory.com.ng/apis/get_user.php?user_email=abedobaah@gmail.com'); // Updated endpoint
+                const response = await fetch(`https://raotory.com.ng/apis/get_user.php?user_email=${userEmail}`); // Updated endpoint
                 const data = await response.json();
                 
                 if (!data.error) {
@@ -42,6 +45,9 @@ const Settings = () => {
 
         fetchUserDetails();
     }, []);
+
+
+    
 
     return (
         <>

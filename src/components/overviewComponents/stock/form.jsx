@@ -112,6 +112,11 @@ const Form = () => {
         return `${year}-${month}-${day}`;
     };
 
+    const handleRemoveProduct = (index) => {
+        const updatedProducts = selectedProducts.filter((_, i) => i !== index);
+        setSelectedProducts(updatedProducts);
+    };
+
     return (
         <div className="flex justify-between mt-20">
             <ToastContainer />
@@ -190,7 +195,11 @@ const Form = () => {
                         Add Product
                     </button>}
             </form>
-            <SelectedProducts products={selectedProducts} onStockUp={handleStockUp} />
+            <SelectedProducts 
+                products={selectedProducts} 
+                onStockUp={handleStockUp} 
+                onRemoveProduct={handleRemoveProduct} 
+            />
         </div>
     );
 };

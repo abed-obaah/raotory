@@ -1,11 +1,33 @@
 import { useState, useEffect } from 'react';
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions,Label } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import axios from 'axios';
 import { useAuth } from '../../../context/AuthContext'; 
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from 'react-toastify';  // Import toast components
 import 'react-toastify/dist/ReactToastify.css';  // Import toast styles
+// import { useState } from 'react'
+
+
+
+
+
+
+
+
+
+
+
+const people = [
+  { id: 1, name: 'Price Type' },
+  { id: 2, name: 'Arlene Mccoy' },
+  { id: 3, name: 'Arlene Mccoy' },
+  { id: 4, name: 'Arlene Mccoy' },
+  { id: 5, name: 'Arlene Mccoy' },
+
+]
+
+
 
 
 export default function Example() {
@@ -21,6 +43,10 @@ export default function Example() {
   const [addedProducts, setAddedProducts] = useState([]); // List of added products
   const [grandTotal, setGrandTotal] = useState(0); // Overall total price
   const [selectedPaymentType, setSelectedPaymentType] = useState(''); // State for payment type
+
+  const [selecteds, setSelecteds] = useState(people[3])
+
+
 
   const userEmail = user?.email;
 
@@ -47,6 +73,7 @@ export default function Example() {
       try {
         const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
         const data = await response.json();
+        console.log("itesm",data)
         if (!data.error) {
           setProducts(data.drugs); // Store the fetched products in the state
         }
@@ -166,26 +193,39 @@ const handlePayment = async () => {
     customer.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+// Assuming you have addedProducts and setAddedProducts state
+const handleRemoveProduct = (index) => {
+  // Create a new array without the removed product
+  const updatedProducts = addedProducts.filter((_, i) => i !== index);
+  setAddedProducts(updatedProducts);
+
+  // Optionally recalculate the grand total after the removal
+  const newTotal = updatedProducts.reduce((sum, product) => sum + (product.retail_price * product.quantity), 0);
+  setGrandTotal(newTotal);
+};
+
+
+
   return (
     <div>
 
       <ToastContainer />
       {/* Use a standard <label> element instead of <Label /> */}
-      <label className="block font-medium text-gray-900">Search Customer</label>
+      <label className="block font-medium text-gray-900">Search Customers</label>
 
-      <input
+      {/* <input
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search..."
         className="mt-2 mb-2 w-full h-[3.25rem] rounded-md border border-gray-300 py-1.5 px-3  focus:ring-indigo-600 focus:border-indigo-600"
-      />
+      /> */}
 
       {error && <div className="text-red-500">{error}</div>} {/* Display error if there's any */}
 
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1 ">
-          <ListboxButton className="relative w-full h-[3.25rem] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 ">
+          <ListboxButton className="relative w-[39%] h-[3.25rem] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 ">
             <span className="block truncate">{selected ? selected.name : 'Select a customer'}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronUpDownIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
@@ -194,7 +234,7 @@ const handlePayment = async () => {
 
           <ListboxOptions
             transition
-            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            className="absolute z-10 mt-1 max-h-60 w-[39%] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
           >
             {filteredCustomers.length > 0 ? (
               filteredCustomers.map((customer) => (
@@ -268,6 +308,43 @@ const handlePayment = async () => {
         </button>
       </div>
 
+      <div className="flex justify-end">
+  <Listbox value={selecteds} onChange={setSelecteds} as="div" className="w-[10%]">
+    
+    <div className="relative mt-2">
+      <ListboxButton className="py-3 relative w-full cursor-default rounded-md bg-white pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
+        <span className="block truncate">{selecteds.name}</span>
+        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+          <ChevronUpDownIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
+        </span>
+      </ListboxButton>
+
+      <ListboxOptions
+        transition
+        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+      >
+        {people.map((person) => (
+          <ListboxOption
+            key={person.id}
+            value={person}
+            className="group relative cursor-default select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+          >
+            <span className="block truncate font-normal group-data-[selected]:font-semibold">
+              {person.name}
+            </span>
+
+            <span className="absolute inset-y-0 left-0 flex items-center pl-1.5 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
+              <CheckIcon aria-hidden="true" className="h-5 w-5" />
+            </span>
+          </ListboxOption>
+        ))}
+      </ListboxOptions>
+    </div>
+  </Listbox>
+</div>
+
+
+
       {/* Display added products */}
       <div className="mt-9">
     <table className="w-full">
@@ -286,7 +363,7 @@ const handlePayment = async () => {
                 <tr key={index} className="border text-gray-400">
                     <td className="border p-3">{index + 1}</td>
                     <td className="border p-3">{product.product_name}</td>
-                    <td className="border p-3">NGN{product.cost_price}</td>
+                    <td className="border p-3">NGN{product.retail_price}</td>
                     <td className="border p-3" style={{ color: "black", opacity: '.8' }}>NGN{product.retail_price}</td>
                     <td className="border p-3 w-auto">
                         <input
@@ -299,7 +376,10 @@ const handlePayment = async () => {
                     </td>
                     <td className="border p-3 flex justify-between">
                         NGN{product.retail_price * product.quantity}
-                        <div className="bg-red-300 p-2 rounded-full">
+                        <div
+                            className="bg-red-300 p-2 rounded-full cursor-pointer"
+                            onClick={() => handleRemoveProduct(index)}  // Call the remove function
+                        >
                             <TrashIcon height='20px' color="red" />
                         </div>
                     </td>
@@ -312,6 +392,7 @@ const handlePayment = async () => {
         </tbody>
     </table>
 </div>
+
 
 
       {/* Payment section */}
