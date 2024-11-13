@@ -45,6 +45,7 @@ export default function Example() {
   const [grandTotal, setGrandTotal] = useState(0); // Overall total price
   const [selectedPaymentType, setSelectedPaymentType] = useState(''); // State for payment type
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTermP, setSearchTermP] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState(""); // Set selected customer
   const [filteredCustomers, setFilteredCustomers] = useState([]); // Filtered customers
   
@@ -55,6 +56,9 @@ export default function Example() {
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
   const [isPaymentMade, setIsPaymentMade] = useState(false); // Track whether payment has been made
   const [isInvoiceIssued, setIsInvoiceIssued] = useState(false);
+  // const [products, setProducts] = useState([]); // State to hold the fetched products
+  // const [selectedProduct, setSelectedProduct] = useState(''); // State for selected product
+  const [showDropdownP, setShowDropdownP] = useState(false);
 
   const handlePayments = () => {
     setIsPaymentMade(true); // Toggle the component
@@ -165,6 +169,10 @@ export default function Example() {
       fetchProducts();
     }
   }, [userEmail]);
+
+  const filteredProducts = products.filter((product) =>
+    product.product_name.toLowerCase().includes(searchTermP.toLowerCase())
+  );
 
   // const handleProductSelection = (e) => {
   //   const selectedProductName = e.target.value;
@@ -736,11 +744,14 @@ const handleQuantityChange = (index, newQuantity) => {
   <ProductSearchComponent
     selectedCustomer={selectedCustomer}
     showDropdown={showDropdown}
+    showDropdownP={showDropdownP}
     setShowDropdown={setShowDropdown}
+    setShowDropdownP={setShowDropdownP}
     handleSearchChange={handleSearchChange}
     filteredCustomers={filteredCustomers}
     setSelectedCustomer={setSelectedCustomer}
     searchTerm={searchTerm}
+    searchTermP={searchTermP}
     error={null} // Pass error state if needed
     handleProductSelection={handleProductSelection}
     products={products}

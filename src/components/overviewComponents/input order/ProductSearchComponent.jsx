@@ -6,11 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 const ProductSearchComponent = ({
   selectedCustomer,
   showDropdown,
+  showDropdownP,
   setShowDropdown,
+  setShowDropdownP,
   handleSearchChange,
   filteredCustomers,
   setSelectedCustomer,
   searchTerm,
+  searchTermP,
   error,
   handleProductSelection,
   products,
@@ -30,6 +33,14 @@ const ProductSearchComponent = ({
   people,
   handleSelectChange
 }) => {
+
+
+ // State to hold the fetched products
+  const [selectedProduct, setSelectedProduct] = useState(''); // State for selected product]
+  const filteredProducts = products.filter((product) =>
+    product.product_name.toLowerCase().includes(searchTermP.toLowerCase())
+  );
+
   return (
     <div>
       <div>
@@ -79,39 +90,96 @@ const ProductSearchComponent = ({
             {/* Modal and Icon */}
           </div>
         </div>
-        <div className="mt-10 flex space-x-4 -ml-5">
-          <datalist id="suggestions">
-            {products.length > 0 ? (
-              products.map((product) => (
-                <option key={product.id} value={product.product_name}>
-                  {product.product_name}
-                </option>
-              ))
-            ) : (
-              <option>No products available</option>
-            )}
-          </datalist>
-          <input
-            autoComplete="on"
-            list="suggestions"
-            placeholder="Search products..."
-            onChange={handleProductSelection}
-            className="h-5 border p-7 w-[224px] rounded-lg"
-          />
-          {/* <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            placeholder="Quantity"
-            className="h-5 border p-7 w-2/4 rounded-lg"
-          /> */}
+        <div className="mt-10 flex space-x-4 -ml-5 justify-between">
+          <div className='flex space-x-3'>
+              {/* <datalist id="suggestions">
+                {products.length > 0 ? (
+                  products.map((product) => (
+                    <option key={product.id} value={product.product_name}>
+                      {product.product_name}
+                    </option>
+                  ))
+                ) : (
+                  <option>No products available</option>
+                )}
+              </datalist>
+              <input
+                autoComplete="on"
+                list="suggestions"
+                placeholder="Search products..."
+                onChange={handleProductSelection}
+                className="h-5 border p-7 w-[224px] rounded-lg"
+              /> */}
+
+
+<div className="relative w-80"> {/* Adjusted width */}
+      {/* Input field to display selected product */}
+      <input
+        type="text"
+        value={selectedProduct}
+        className="w-full p-2 border border-gray-300 rounded-lg font-bold text-lg pr-16"
+        placeholder="Select Product"
+        readOnly
+        onClick={() => setShowDropdownP(!showDropdownP)}  // Toggle dropdown visibility on click
+      />
+      
+      {/* Dropdown container that shows only when showDropdown is true */}
+      {showDropdownP && (
+        <div className="absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+          {/* Search input inside dropdown */}
           <input
             type="text"
-            value={totalPrice}
-            placeholder="Amount"
-            className="h-5 border p-7 w-2/4 rounded-lg"
-            readOnly
+            className="w-full p-2 border-b border-gray-300 rounded-t-lg"
+            placeholder="Search for a product"
+            value={searchTermP}
+            onChange={(e) => setSearchTermP(e.target.value)}
           />
+          
+          {/* Dropdown list */}
+          <div className="max-h-40 overflow-y-auto">
+            {filteredProducts.length === 0 ? (
+              <p className="p-2 text-center text-sm">No products found</p>
+            ) : (
+              filteredProducts.map((product, index) => (
+                <button
+                  key={index}
+                  className="w-full text-left p-2 hover:bg-gray-100"
+                  onClick={() => {
+                    setSelectedProduct(product.product_name);  // Set the selected product
+                    setSearchTermP('');  // Clear search term after selecting
+                    setShowDropdownP(false);  // Close dropdown after selection
+                  }}
+                >
+                  {product.product_name}
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Change link */}
+      <a href="#" className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-blue-600">
+        Change
+      </a>
+    </div>
+
+              {/* <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                placeholder="Quantity"
+                className="h-5 border p-7 w-2/4 rounded-lg"
+              /> */}
+              <input
+                type="text"
+                value={totalPrice}
+                placeholder="Amount"
+                className="h-5 border p-7 w-2/4 rounded-lg"
+                readOnly
+              />
+          </div>
+        
           <button
             onClick={handleAddProduct}
             className="mb-2 bg-[#0E90DA] text-white py-0.5 px-3 rounded"
