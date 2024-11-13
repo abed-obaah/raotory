@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import VectorBG from '../../../../src/assets/Vector18.svg';
 import HeadImage from '../../../../src/assets/imager.svg';
+import { useAuth } from '../../../context/AuthContext'; 
 
 import Table from './table';
 import Data from './Data';
@@ -11,6 +12,8 @@ const Invoice = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
     const [selectedCount, setSelectedCount] = useState(0);
     const [selectedRows, setSelectedRows] = useState([]);
+    const { user } = useAuth();
+  const userEmail = user?.email;
 
     // Sample products array
     const products = [
@@ -26,7 +29,7 @@ const Invoice = () => {
         return (
             <>
                 <div className="bg-blue-500 relative justify-between align-center overflow-hidden w-full h-full rounded-lg p-7 text-white bg-right bg-no-repeat" style={{ backgroundImage: `url(${VectorBG})` }}>
-                    <h1 className="text-2xl pb-7">All Invoices</h1>
+                    <h1 className="text-2xl pb-7">All Invoices for {userEmail}</h1>
                     <form className="flex gap-3 text-gray-400-500">
                         <div className="item">
                             <label htmlFor="">Begin Date</label><br />

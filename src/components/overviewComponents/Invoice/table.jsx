@@ -9,7 +9,7 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
     const itemsPerPage = 5; // Limit to 5 items per page
     const { user } = useAuth();
     const userEmail = user?.email;
-    const thead = ['Customer Name', 'Invoice Number', 'Sales Type', 'Status'];
+    const thead = ['Customer Names', 'Invoice Number', 'Product Name', 'Sales Type', 'Status'];
     const [selectedRows, setSelectedRows] = useState([]);
 
     useEffect(() => {
@@ -23,7 +23,9 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+               
                 const data = await response.json();
+                console.log("invoice for user:",data)
                 if (data.success) {
                     const formattedInvoices = data.invoices.map(invoice => ({
                         id: invoice.id,
@@ -112,6 +114,7 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                 <div className="table-header flex p-3 font-semibold text-gray-500">
                     <div className="w-1/4">Customer Name</div>
                     <div className="w-1/4">Invoice Number</div>
+                    <div className="w-1/4">Product Name</div>
                     <div className="w-1/4">Sales Type</div>
                     <div className="w-1/4 flex justify-between items-center">
                         <span>Status</span>
@@ -137,6 +140,11 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                                 'bg-yellow-100 text-yellow-600'
                             }`}>
                                 {invoice.status}
+                            </span>
+                            <span className="status-badge px-3 py-1 rounded-full bg-green-100 text-green-600
+                               
+                            ">
+                                Paid
                             </span>
                             <button className="view-btn bg-blue-500 text-white px-4 py-2 rounded-lg" onClick={() => handleClick(invoice)}>
                                 View

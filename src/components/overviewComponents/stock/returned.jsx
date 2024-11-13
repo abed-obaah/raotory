@@ -12,7 +12,7 @@ const Table = () => {
     const userEmail = user?.email;
 
     // Columns for the table
-    const cols = ['N/O', 'Product Name', "Quantity Returned", "Expiring Date", "Batch Number", 'Total Cost Price', "Retail Price"];
+    const cols = ['N/O', 'Product Name', "Quantity Returned", "Expiring Date", "Batch Number", 'Total Cost Price', "Retail Price","Date Returned"];
 
     // Function to fetch refund data from the API
     const fetchRefunds = async () => {
@@ -67,6 +67,13 @@ const Table = () => {
                                 <td className="p-3 border-x">{product.batch_number}</td>
                                 <td className="p-3 border-x">{product.total_cost_price}</td>
                                 <td className="p-3 border-x">{product.retail_price}</td>
+                                <td className="p-3 border-x">
+                                    {new Date(product.return_date).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}
+                                    </td>
                             </tr>
                         ))}
                     </tbody>

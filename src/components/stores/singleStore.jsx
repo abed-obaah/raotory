@@ -67,36 +67,87 @@ const Donate = ({ price }) => {
 
   const amount = parseInt(price.replace(/NGN|,/g, '').trim(), 10); // Converts the cleaned string to an integer
 
+  // const componentProps = {
+  //   email,
+  //   amount: amount * 100, // Ensure amount is in kobo
+  //   publicKey,
+  //   text: "Pay Now",
+  //   onSuccess: async () => {
+  //     // Call the PHP script to store the payment information
+  //     const response = await fetch('https://raotory.com.ng/apis/store_payment.php', { // Update with your PHP script path
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/x-www-form-urlencoded',
+  //       },
+  //       body: new URLSearchParams({
+  //         email,
+  //         store_name: storeName,
+  //         location,
+  //         number_of_items: numberOfItems,
+  //       }), // Send additional data as form data
+  //     });
+
+  //     const data = await response.json();
+  //     if (data.success) {
+  //       alert(data.message); // Notify the user
+  //       setIsPaymentSuccessful(true); // Set payment success state
+  //     } else {
+  //       alert(data.message || 'An error occurred.');
+  //     }
+  //   },
+  //   onClose: () => alert("You need to complete your payment!"),
+  // };
+
   const componentProps = {
     email,
     amount: amount * 100, // Ensure amount is in kobo
     publicKey,
     text: "Pay Now",
     onSuccess: async () => {
-      // Call the PHP script to store the payment information
-      const response = await fetch('https://raotory.com.ng/apis/store_payment.php', { // Update with your PHP script path
+      // First call to the PHP script to store the payment information
+      const response = await fetch('https://raotory.com.ng/apis/store_payment.php', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json', // Sending JSON data
         },
-        body: new URLSearchParams({
+        body: JSON.stringify({
           email,
           store_name: storeName,
           location,
           number_of_items: numberOfItems,
-        }), // Send additional data as form data
+        }), // Send data as a JSON string
       });
-
+      
+  
       const data = await response.json();
       if (data.success) {
         alert(data.message); // Notify the user
-        setIsPaymentSuccessful(true); // Set payment success state
+  
+        // Second call to update the paid_status in the database
+        const updateStatusResponse = await fetch('https://raotory.com.ng/apis/updatePaidStatus.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Ensure correct headers
+          },
+          body: JSON.stringify({
+            email, // Use the email to identify the user and update paid_status
+          }),
+        });
+  
+        const updateStatusData = await updateStatusResponse.json();
+        if (updateStatusData.message === "Paid status updated successfully.") {
+          alert("Payment successful! Status updated.");
+          setIsPaymentSuccessful(true); // Set payment success state
+        } else {
+          alert(updateStatusData.message || "Failed to update paid status.");
+        }
       } else {
-        alert(data.message || 'An error occurred.');
+        alert(data.message || "An error occurred.");
       }
     },
     onClose: () => alert("You need to complete your payment!"),
   };
+  
 
   if (isPaymentSuccessful) {
     return (

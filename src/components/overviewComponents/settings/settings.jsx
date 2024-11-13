@@ -165,7 +165,7 @@ const Settings = () => {
                         type="password"
                         className="w-full border rounded-lg p-3 pl-4"
                         placeholder="Enter your password"
-                        value={password}
+                        value=""
                         onChange={(e) => setPassword(e.target.value)}
                         readOnly={!isEditablePassword}
                         style={{ backgroundColor: 'white', color: 'darkblue' }}
