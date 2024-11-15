@@ -64,9 +64,9 @@ export default function Example() {
     setIsPaymentMade(true); // Toggle the component
   };
 
-  const handleIssueInvoice = () => {
-    setIsInvoiceIssued(true);
-  };
+  // const handleIssueInvoice = () => {
+  //   setIsInvoiceIssued(true);
+  // };
   
 
   // const handleIconClick = () => {
@@ -186,9 +186,47 @@ export default function Example() {
   //     setTotalPrice(''); // Clear the price if no product is selected
   //   }
   // };
-  const handleProductSelection = (e) => {
-    const selectedProductName = e.target.value;
+  // const handleProductSelection = (e) => {
+  //   const selectedProductName = e.target.value;
     
+  //   // Find the product in the products array
+  //   const product = products.find((p) => p.product_name === selectedProductName);
+  
+  //   if (product) {
+  //     // Ensure the product has a valid stock value
+  //     if (product.stock <= 0) {
+  //       toast.error(`Sorry, ${product.product_name} is out of stock.`);
+  //       setSelectedProduct(null);
+  //       setTotalPrice('');
+  //       return; // Exit early if the product is out of stock
+  //     }
+  
+  //     // Set the selected product and decide on the price (retail or wholesale)
+  //     setSelectedProduct(product);
+      
+  //     // Assuming the condition is based on some flag (e.g., `isWholesale`)
+  //     const price = product.isWholesale ? product.wholesale_price : product.retail_price;
+  //     setTotalPrice(price); // Set the correct price based on condition
+  //   } else {
+  //     // Clear the selected product and reset the price if no product is selected
+  //     setSelectedProduct(null);
+  //     setTotalPrice('');
+  //     toast.error('Product not found, please select a valid product.');
+  //   }
+  // };
+
+
+  const handleProductSelection = (selectedOption) => {
+    if (!selectedOption) {
+      // If nothing is selected, reset everything
+      setSelectedProduct(null);
+      setTotalPrice('');
+      return;
+    }
+  
+    // Extract product name (assuming you're passing product_name as the value)
+    const selectedProductName = selectedOption.label;  // Since you used label for the display name
+  
     // Find the product in the products array
     const product = products.find((p) => p.product_name === selectedProductName);
   
@@ -214,6 +252,7 @@ export default function Example() {
       toast.error('Product not found, please select a valid product.');
     }
   };
+  
   
 
   // Function to add the selected product to the table
@@ -307,11 +346,50 @@ export default function Example() {
 
 
 
+// const handlePayment = async () => {
+//   if (!selectedCustomer || addedProducts.length === 0) {
+//       toast.error("Please select a customer and add products before making a payment.");
+//       return;
+//     }
+
+//   const payload = {
+//     customer_name: selectedCustomer,
+//     store_email: userEmail,
+//     user_email: userEmail,
+//     total_price: grandTotal,
+//     payment_type: selectedPaymentType,
+//     products: addedProducts.map(product => ({
+//       Productname: product.product_name,
+//       Quantity: product.quantity,
+//       SellPrice: selecteds.value === 'retail_price' ? product.retail_price : product.wholesale_price
+//     }))
+//   };
+
+
+
+//   console.log("Payload to send:", payload);  // Log the payload
+
+//   try {
+//       const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
+//       console.log("Payment response:", response.data);
+
+//       // Show a success toast when payment is successful
+//       toast.success("Payment successful!");
+//   } catch (error) {
+//       console.error("Error making payment:", error.response ? error.response.data : error.message);
+
+//       // Show an error toast when payment fails
+//       toast.error("Payment failed. Please try again.");
+//   }
+// };
+
+
+
 const handlePayment = async () => {
   if (!selectedCustomer || addedProducts.length === 0) {
-      toast.error("Please select a customer and add products before making a payment.");
-      return;
-    }
+    toast.error("Please select a customer and add products before making a payment.");
+    return;
+  }
 
   const payload = {
     customer_name: selectedCustomer,
@@ -322,27 +400,65 @@ const handlePayment = async () => {
     products: addedProducts.map(product => ({
       Productname: product.product_name,
       Quantity: product.quantity,
+      PurchasePrice:product.purchase_price,
       SellPrice: selecteds.value === 'retail_price' ? product.retail_price : product.wholesale_price
     }))
   };
 
-
-
-  console.log("Payload to send:", payload);  // Log the payload
+  console.log("Payload to send:", payload);  // Log the payload for debugging
 
   try {
-      const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
-      console.log("Payment response:", response.data);
+    const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
+    console.log("Payment response:", response.data);
 
-      // Show a success toast when payment is successful
-      toast.success("Payment successful!");
+    // Show a success toast when payment is successful
+    toast.success("Payment successful!");
+
+    // Set payment made to true
+    setIsPaymentMade(true); // Update the state after successful payment
+
   } catch (error) {
-      console.error("Error making payment:", error.response ? error.response.data : error.message);
+    console.error("Error making payment:", error.response ? error.response.data : error.message);
 
-      // Show an error toast when payment fails
-      toast.error("Payment failed. Please try again.");
+    // Show an error toast when payment fails
+    toast.error("Payment failed. Please try again.");
   }
 };
+
+
+
+const handleIssueInvoice = async () => {
+  try {
+    const response = await fetch("https://raotory.com.ng/apis/issueInvoice.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customer_name: selectedCustomer,
+        user_email: userEmail, // Replace with the actual user email
+        paid_amount: grandTotal,
+        sales_status: selectedPaymentType,
+        products: addedProducts, // Products should have product_name, quantity, retail_price, etc.
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      console.log("Invoice issued successfully:", result.message);
+      setIsInvoiceIssued(true);
+    } else {
+      console.error("Error issuing invoice:", result.error);
+    }
+  } catch (error) {
+    console.error("Failed to issue invoice:", error);
+  }
+};
+
+
+
+
 
    // Filter customers based on the search query
   //  const filteredCustomers = customers.filter((customer) =>
@@ -823,7 +939,7 @@ const handleQuantityChange = (index, newQuantity) => {
                     <tr key={index} className="border text-gray-400">
                       <td className="border p-3">{index + 1}</td>
                       <td className="border p-3 w-1/5">{product.product_name}</td>
-                      <td className="border p-3">NGN{product.cost_price}</td>
+                      <td className="border p-3">NGN{product.purchase_price}d</td>
                       <td className="border p-3" style={{ color: "black", opacity: '.8' }}>NGN{product.retail_price}</td>
                       <td className="border p-3 w-1/5">
                         <input
@@ -894,6 +1010,7 @@ const handleQuantityChange = (index, newQuantity) => {
 
             <div className="mt-4 flex justify-between items-center">
                               <div className="w-[55%]">
+                                
                                 <select
                                   id="paymentType"
                                   value={selectedPaymentType}
@@ -924,10 +1041,30 @@ const handleQuantityChange = (index, newQuantity) => {
 )}
 
 {/* Button to toggle between Make Payment and Issue Invoice */}
+{/* <button
+  onClick={
+    !isPaymentMade
+      ? handlePayments
+      : isInvoiceIssued
+      ? () => {} 
+      : handleIssueInvoice 
+  }
+  className={`bg-[#0E90DA] flex ${
+    isInvoiceIssued ? 'w-[15%] justify-start' : 'w-full justify-center'
+  } rounded-md px-10 py-4 text-lg font-semibold leading-6 text-white mt-10`}
+>
+
+  {!isPaymentMade
+    ? 'Make Payment'
+    : isInvoiceIssued
+    ? 'Print Invoice'
+    : 'Issue Invoice'}
+</button> */}
+
 <button
   onClick={
     !isPaymentMade
-      ? handlePayments // If payment not made, call handlePayments
+      ? handlePayment // If payment not made, call handlePayments
       : isInvoiceIssued
       ? () => {} // Do nothing if invoice is already issued
       : handleIssueInvoice // If payment made but invoice not issued, issue invoice
@@ -943,6 +1080,8 @@ const handleQuantityChange = (index, newQuantity) => {
     ? 'Print Invoice'
     : 'Issue Invoice'}
 </button>
+
+
 
 </div>
   );

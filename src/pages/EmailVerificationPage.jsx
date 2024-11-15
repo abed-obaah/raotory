@@ -16,7 +16,8 @@ export default function Example() {
       try {
         // Make API request to verify OTP
         const response = await axios.post('https://raotory.com.ng/apis/verify_otp.php', { email, otp });
-
+        console.log("otp verification:",response)
+        navigate('/login');
         if (response.data.success) {
           // OTP validation successful, navigate to login
           navigate('/login');

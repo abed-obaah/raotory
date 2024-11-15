@@ -28,6 +28,7 @@ const InvoiceTable = () => {
           const formattedInvoices = data.invoices.map(invoice => ({
             id: invoice.id, // Ensure you have the correct field names
             customer: invoice.customer_name,
+            invoice_id: invoice.invoice_id,
             product_name: invoice.product_name,
             date: invoice.sales_date,
             amount: `NGN ${parseFloat(invoice.paid_amount).toFixed(2)}`,
@@ -141,7 +142,7 @@ const InvoiceTable = () => {
             <tbody>
               {invoices.map((invoice, index) => (
                 <tr key={index} className="text-center">
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">#B2A{invoice.id}</td>
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{invoice.invoice_id}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{invoice.product_name}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{invoice.customer}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{invoice.date}</td>

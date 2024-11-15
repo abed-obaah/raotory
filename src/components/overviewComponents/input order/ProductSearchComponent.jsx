@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TrashIcon,XMarkIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from 'react-toastify';  // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; 
+import Select from 'react-select'
+import Customer from '../Create Customer/form';
 
 const ProductSearchComponent = ({
   selectedCustomer,
@@ -31,15 +33,26 @@ const ProductSearchComponent = ({
   setSelectedPaymentType,
   handlePayment,
   people,
-  handleSelectChange
+  handleSelectChange,
+  selectedProduct,  // Add selectedProduct as a prop
+  setSelectedProduct ,
+  
 }) => {
 
 
  // State to hold the fetched products
-  const [selectedProduct, setSelectedProduct] = useState(''); // State for selected product]
+  // const [selectedProduct, setSelectedProduct] = useState(''); // State for selected product]
   const filteredProducts = products.filter((product) =>
     product.product_name.toLowerCase().includes(searchTermP.toLowerCase())
   );
+  // const [totalPrice, setTotalPrice] = useState('');
+
+
+  const productOptions = products.map((product) => ({
+    value: product.id,
+    label: product.product_name,
+  }));
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div>
@@ -47,122 +60,145 @@ const ProductSearchComponent = ({
         <ToastContainer />
         <label className="block font-medium text-gray-900">Search Customers</label>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ flex: 1 }}>
-            <div className="relative w-80">
-              <input
-                type="text"
-                value={selectedCustomer}
-                className="w-full p-2 border border-gray-300 rounded-lg font-regular text-lg pr-16"
-                placeholder="Select Customer"
-                readOnly
-                onClick={() => setShowDropdown(!showDropdown)}
-              />
-              {showDropdown && (
-                <div className="absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-                  <input
-                    type="text"
-                    className="w-full p-2 border-b border-gray-300 rounded-t-lg"
-                    placeholder="Search for a customer"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                  />
-                  <div className="max-h-40 overflow-y-auto">
-                    {filteredCustomers.map((customer, index) => (
-                      <button
-                        key={index}
-                        className="w-full text-left p-2 hover:bg-gray-100"
-                        onClick={() => {
-                          setSelectedCustomer(customer.name);
-                          setSearchTerm('');
-                          setShowDropdown(false);
-                        }}
-                      >
-                        {customer.name}
-                      </button>
-                    ))}
+                  <div style={{ flex: 1 }}>
+                    <div className="relative w-80">
+                      <input
+                        type="text"
+                        value={selectedCustomer}
+                        className="w-full p-2 border border-gray-300 rounded-lg font-regular text-lg pr-16"
+                        placeholder="Select Customer"
+                        readOnly
+                        onClick={() => setShowDropdown(!showDropdown)}
+                      />
+                      {showDropdown && (
+                        <div className="absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                          <input
+                            type="text"
+                            className="w-full p-2 border-b border-gray-300 rounded-t-lg"
+                            placeholder="Search for a customer"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                          />
+                          <div className="max-h-40 overflow-y-auto">
+                            {filteredCustomers.map((customer, index) => (
+                              <button
+                                key={index}
+                                className="w-full text-left p-2 hover:bg-gray-100"
+                                onClick={() => {
+                                  setSelectedCustomer(customer.name);
+                                  setSearchTerm('');
+                                  setShowDropdown(false);
+                                }}
+                              >
+                                {customer.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {error && <div className="text-red-500 mt-2">{error}</div>}
+                    </div>
                   </div>
-                </div>
-              )}
-              {error && <div className="text-red-500 mt-2">{error}</div>}
-            </div>
-          </div>
-          <div>
-            {/* Modal and Icon */}
-          </div>
+                  <div>
+                    <UserPlusIcon
+                      className="w-10 h-10 cursor-pointer text-white bg-[#0E90DA] p-2 rounded-full shadow-lg hover:bg-blue-300 transition-colors"
+                      onClick={() => setShowModal(true)} // Toggle modal visibility on click
+                    />
+                  </div>
         </div>
-        <div className="mt-10 flex space-x-4 -ml-5 justify-between">
-          <div className='flex space-x-3'>
-              {/* <datalist id="suggestions">
-                {products.length > 0 ? (
-                  products.map((product) => (
-                    <option key={product.id} value={product.product_name}>
-                      {product.product_name}
-                    </option>
-                  ))
-                ) : (
-                  <option>No products available</option>
-                )}
-              </datalist>
-              <input
-                autoComplete="on"
-                list="suggestions"
-                placeholder="Search products..."
-                onChange={handleProductSelection}
-                className="h-5 border p-7 w-[224px] rounded-lg"
-              /> */}
 
 
-<div className="relative w-80"> {/* Adjusted width */}
-      {/* Input field to display selected product */}
-      <input
-        type="text"
-        value={selectedProduct}
-        className="w-full p-2 border border-gray-300 rounded-lg font-bold text-lg pr-16"
-        placeholder="Select Product"
-        readOnly
-        onClick={() => setShowDropdownP(!showDropdownP)}  // Toggle dropdown visibility on click
-      />
-      
-      {/* Dropdown container that shows only when showDropdown is true */}
-      {showDropdownP && (
-        <div className="absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-          {/* Search input inside dropdown */}
-          <input
-            type="text"
-            className="w-full p-2 border-b border-gray-300 rounded-t-lg"
-            placeholder="Search for a product"
-            value={searchTermP}
-            onChange={(e) => setSearchTermP(e.target.value)}
-          />
-          
-          {/* Dropdown list */}
-          <div className="max-h-40 overflow-y-auto">
-            {filteredProducts.length === 0 ? (
-              <p className="p-2 text-center text-sm">No products found</p>
-            ) : (
-              filteredProducts.map((product, index) => (
-                <button
-                  key={index}
-                  className="w-full text-left p-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setSelectedProduct(product.product_name);  // Set the selected product
-                    setSearchTermP('');  // Clear search term after selecting
-                    setShowDropdownP(false);  // Close dropdown after selection
-                  }}
-                >
-                  {product.product_name}
-                </button>
-              ))
-            )}
+        {showModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-[50%] p-6 rounded-lg shadow-lg">
+            <Customer />
+            <button
+              className="mt-4 bg-red-500 text-white p-2 rounded"
+              onClick={() => setShowModal(false)} // Close modal
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
-
-      {/* Change link */}
-      <a href="#" className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-blue-600">
-        Change
-      </a>
+        <div className="mt-10 flex space-x-4 -ml-5 justify-between">
+          <div className='flex space-x-3 ml-5'>
+          <div>
+                 <div className="mt-2">
+      <label
+        htmlFor="product-select"
+        className="block text-sm font-medium text-gray-900"
+      >
+        Select a product
+      </label>
+      <Select
+        id="product-select"
+        value={selectedProduct} // Control the selected value
+        onChange={handleProductSelection} // Handle change
+        options={productOptions} // List of products as options
+        placeholder="Search products..." // Placeholder text
+        getOptionLabel={(e) => e.label} // Label display for each option
+        getOptionValue={(e) => e.value} // Value used for selection
+        className="mt-2 block w-[600px] rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600"
+        isSearchable={true} // Enable searching
+      />
     </div>
+          </div>
+
+
+
+              {/* <div className="relative w-80">
+              
+              <input
+                type="text"
+                value={selectedProduct}
+                className="w-full p-2 border border-gray-300 rounded-lg font-bold text-lg pr-16"
+                placeholder="Select Product"
+                readOnly
+                onClick={() => setShowDropdownP(!showDropdownP)}
+              />
+              
+           
+              {showDropdownP && (
+                <div className="absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                
+                  <input
+                    type="text"
+                    className="w-full p-2 border-b border-gray-300 rounded-t-lg"
+                    placeholder="Search for a product"
+                    value={searchTermP}
+                    onChange={(e) => setSearchTermP(e.target.value)}
+                  />
+                  
+                 
+                  <div className="max-h-40 overflow-y-auto">
+                    {filteredProducts.length === 0 ? (
+                      <p className="p-2 text-center text-sm">No products found</p>
+                    ) : (
+                      filteredProducts.map((product, index) => (
+                        <button
+                          key={index}
+                          className="w-full text-left p-2 hover:bg-gray-100"
+                          onClick={() => {
+                            setSelectedProduct(product.product_name);
+                            setTotalPrice(product.retail_price);
+                            setSearchTermP('');
+                            setShowDropdownP(false);
+                          }}
+                        >
+                          {product.product_name}{product.retail_price}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+
+            
+              <a href="#" className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-blue-600">
+                Change
+              </a>
+            </div> */}
 
               {/* <input
                 type="number"
@@ -171,20 +207,20 @@ const ProductSearchComponent = ({
                 placeholder="Quantity"
                 className="h-5 border p-7 w-2/4 rounded-lg"
               /> */}
-              <input
+              {/* <input
                 type="text"
                 value={totalPrice}
                 placeholder="Amount"
                 className="h-5 border p-7 w-2/4 rounded-lg"
                 readOnly
-              />
+              /> */}
           </div>
         
           <button
-            onClick={handleAddProduct}
-            className="mb-2 bg-[#0E90DA] text-white py-0.5 px-3 rounded"
-          >
-            Add Product
+              onClick={handleAddProduct}
+              className="mb-2 bg-[#0E90DA] text-white py-1 px-4 rounded text-sm h-10 mt-10"
+            >
+              Add Product
           </button>
         </div>
         <div className="mt-9">
@@ -204,7 +240,7 @@ const ProductSearchComponent = ({
                 <tr key={index} className="border text-gray-400">
                   <td>{index + 1}</td>
                   <td>{product.product_name}</td>
-                  <td>{product.retail_price}</td>
+                  <td>{product.purchase_price}s</td>
                   <td>
                     <input
                       type="number"
@@ -219,12 +255,12 @@ const ProductSearchComponent = ({
                       onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 1)}
                     />
                   </td>
-                  <td>NGN{product.retail_price * product.quantity}</td>
+                  <td>NGNs{product.retail_price * product.quantity}</td>
                 </tr>
               ))}
               <tr>
                 <td colSpan="5">Total</td>
-                <td>NGN{grandTotal}</td>
+                <td>NGN {grandTotal}</td>
               </tr>
             </tbody>
           </table>

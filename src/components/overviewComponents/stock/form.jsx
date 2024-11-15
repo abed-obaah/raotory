@@ -172,10 +172,10 @@ const Form = () => {
                     onChange={handleInputChange}
                 />
                 <input
-                    type="date"
+                    type="text"
                     name="expirationDate"
                     className="border w-full p-3 rounded-lg mt-4 mb-9"
-                    placeholder="Expiration date"
+                     placeholder="Expiration date (YY/MM/DD)"
                     value={formData.expirationDate}
                     onChange={handleInputChange}
                     min={getMinExpirationDate()} // Set the minimum expiration date to 1 month ahead

@@ -51,21 +51,24 @@ const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedC
     
                 // Send the POST request to the backend
                 const response = await axios.post('https://raotory.com.ng/apis/refund.php', refundRequests);
-                
-                // Log the response on success
+    
+                // Display the response message in a success toast
+                const responseMessage = response.data.message || 'Refund processed successfully!';
+                toast.success(responseMessage); // Notify the user of success with message from the backend
                 console.log('Response:', response.data);
-                // Show success toast on successful refund processing
-                toast.success('Refund processed successfully!'); // Notify the user of success
+    
             } catch (error) {
                 console.error('Error processing refunds:', error);
-                // Show error toast on failure
-                toast.error('Failed to process refunds. Please try again.'); // Notify the user of failure
+                const errorMessage = error.response?.data?.message || 'Failed to process refunds. Please try again.';
+                // Display the error message in an error toast
+                toast.error(errorMessage); // Notify the user of failure with message from the backend or fallback
             }
         } else {
             // Show error toast if no items are selected for refund
             toast.error('No items selected for refund');
         }
     };
+    
 
     useEffect(() => {
         console.log('Selected Invoice:', selectedInvoice);

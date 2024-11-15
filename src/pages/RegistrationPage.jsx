@@ -37,10 +37,12 @@ export default function Example() {
         navigate('/otp', { state: { email } });
       } else {
         setMessage(response.data.message); // Handle error messages
+        navigate('/otp', { state: { email } });
       }
     } catch (error) {
       console.error("Error during registration:", error); // Log error
       setMessage('An error occurred during registration. Please try again.');
+      navigate('/otp', { state: { email } });
     } finally {
       setLoading(false); // Stop loading in both success and error cases
     }

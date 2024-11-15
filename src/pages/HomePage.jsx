@@ -54,14 +54,26 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Help from '../components/helpCenter'
 
+// const navigation = [
+//   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
+//   { name: 'Input Order', href: '#', icon: ShoppingCartIcon , current: false },
+//   { name: 'Create Customers', href: '#', icon: UserCircleIcon, current: false },
+//   { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false },
+//   { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false },
+//   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+//   // { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon, current: false },
+//   { name: 'Help Center', href: '#', icon: NewspaperIcon, current: false },
+// ];
+
+
 const navigation = [
   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
-  { name: 'Input Order', href: '#', icon: ShoppingCartIcon , current: false },
+  // Placeholder for Products
+  { name: 'Input Order', href: '#', icon: ShoppingCartIcon, current: false },
   { name: 'Create Customers', href: '#', icon: UserCircleIcon, current: false },
   { name: 'Products', href: '#', icon: ClipboardDocumentCheckIcon, current: false },
   { name: 'Invoice', href: '#', icon: NewspaperIcon, current: false },
   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
-  // { name: 'Help Center', href: '#', icon: QuestionMarkCircleIcon, current: false },
   { name: 'Help Center', href: '#', icon: NewspaperIcon, current: false },
 ];
 
@@ -80,9 +92,12 @@ export default function Example() {
   const [enabled, setEnabled] = useState(false)
   const { user, isAuthenticated, logout } = useAuth()
   const [open, setOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
+  // const [productsOpen, setProductsOpen] = useState(false);
 
-  const [productsOpen, setProductsOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
 
@@ -96,6 +111,11 @@ export default function Example() {
     setOpen(false)
     navigate('/login') // Redirect to login page
   }
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setIsOpen(false); // Close the dropdown when an item is selected
+  };
 
   const renderContent = () => {
     const isPaid = user && user.paid_status === "1" // Check if the user has paid status of "1"
@@ -296,147 +316,107 @@ export default function Example() {
               {/* <h1 className="text-[24px] font-inter font-bold leading-[29.05px] text-[#008C38]">RAOTory</h1> */}
             </div>
 
-            <nav className="flex flex-1 flex-col">
-      <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <nav>
+        {navigation.map((item, index) => {
+          // If the item is 'Products', render the dropdown instead
+          if (item.name === 'Products') {
+            return (
+              <div key={item.name}>
+                {/* Custom Products Dropdown */}
+                {productsOpen && !isDisabled && (
+  <div className="relative">
+    <button
+  onClick={() => setIsOpen(!isOpen)}
+  className={`flex items-center justify-between w-full p-2 rounded ${
+    selectedItem === 'Products'
+      ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]' // Active state
+      : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2' // Default state
+  }`}
+>
+  <div className="flex items-center space-x-2">
+    <ClipboardDocumentCheckIcon className="w-6 h-6 text-[#0E90DA]" />
+    <span>Products</span>
+  </div>
+  <ChevronDownIcon
+    className={`w-6 h-6 transition-transform ${isOpen ? 'transform rotate-180' : ''}`}
+  />
+</button>
+
+    {isOpen && (
+      <ul className="pl-4 mt-2 space-y-2">
         <li>
-          <ul role="list" className="-mx-2 space-y-1">
-            {navigation.map((item) => {
-              const isPaid = user && user.paid_status === "1"; // Check if the user has paid status of "1"
-              const isDisabled = !isPaid && item.name !== 'Overview'; // Disable other items if not paid
-
-              return (
-                <li key={item.name}>
-                  <a
-                    href={isDisabled ? '#' : item.href} // Disable the href if the item is disabled
-                    onClick={
-                      isDisabled
-                        ? (e) => e.preventDefault() // Prevent click if the item is disabled
-                        : item.name === 'Products'
-                        ? handleProductClick
-                        : item.name === 'Settings'
-                        ? handleSettingsClick
-                        : () => setSelectedItem(item.name)
-                    }
-                    className={classNames(
-                      item.name === selectedItem
-                        ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]'
-                        : isDisabled
-                        ? 'text-gray-400 cursor-not-allowed' // Add disabled styles
-                        : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2 ',
-                      'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-                    )}
-                    aria-disabled={isDisabled}
-                  >
-                    <item.icon
-                      aria-hidden="true"
-                      className={classNames(
-                        item.name === selectedItem
-                          ? 'text-[#0E90DA]'
-                          : isDisabled
-                          ? 'text-gray-400' // Add disabled icon color
-                          : 'text-indigo-200 group-hover:text-white',
-                        'h-6 w-6 shrink-0',
-                      )}
-                    />
-                    {item.name}
-                  </a>
-
-                  {item.name === 'Products' && productsOpen && !isDisabled && (
-                      <ul className="pl-8 mt-2 space-y-1">
-                        <li>
-                          <a
-                            href="#"
-                            onClick={() => setSelectedItem('Stock Products')}
-                            className={`block p-2 text-sm hover:bg-indigo-50 rounded ${
-                              selectedItem === 'Stock Products' ? 'text-[#0E90DA]' : 'text-gray-400'
-                            }`}
-                          >
-                            Stock Products
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            onClick={() => setSelectedItem('Returned Products')}
-                            className={`block p-2 text-sm hover:bg-indigo-50 rounded ${
-                              selectedItem === 'Returned Products' ? 'text-[#0E90DA]' : 'text-gray-400'
-                            }`}
-                          >
-                            Returned Products
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            onClick={() => setSelectedItem('Inventory')}
-                            className={`block p-2 text-sm hover:bg-indigo-50 rounded ${
-                              selectedItem === 'Inventory' ? 'text-[#0E90DA]' : 'text-gray-400'
-                            }`}
-                          >
-                            Inventory
-                          </a>
-                        </li>
-                      </ul>
-                    )}
-
-
-                  {item.name === 'Settings' && settingsOpen && !isDisabled && (
-                    <ul className="pl-8 mt-2 space-y-1">
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() => setSelectedItem('General Settings')}
-                          className="block p-2 text-sm text-gray-400 hover:bg-indigo-50 rounded"
-                        >
-                          General
-                        </a>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </li>
-
-        {/* Dark mode and Logout */}
-        <li className="mt-auto">
-          <Field className="-mx-2 flex items-center justify-between rounded-lg bg-gray-50 px-2 py-3 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-            <div className="flex items-center">
-              <MoonIcon
-                aria-hidden="true"
-                className="h-6 w-6 shrink-0 text-[#001B2A] group-hover:text-indigo-600"
-              />
-              <Label as="span" className="ml-10 text-sm">
-                <span className="font-medium text-gray-900">Dark Mode</span>
-              </Label>
-            </div>
-            <Switch
-              checked={enabled}
-              onChange={setEnabled}
-              className="group relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#9CA0B2] transition-colors duration-200 ease-in-out data-[checked]:bg-indigo-600"
-            >
-              <span
-                aria-hidden="true"
-                className="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out group-data-[checked]:translate-x-4"
-              />
-            </Switch>
-          </Field>
-
           <a
             href="#"
-            onClick={() => setOpen(true)} // Open the modal when clicked
-            className="group mt-5 -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-[#CA0000] hover:bg-gray-50 hover:text-indigo-600"
+            onClick={() => handleItemClick('Stock Products')}
+            className={`flex items-center text-sm ${
+              selectedItem === 'Stock Products' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
+            }`}
           >
-            <Cog6ToothIcon
-              aria-hidden="true"
-              className="h-6 w-6 shrink-0 text-[#CA0000] group-hover:text-indigo-600"
-            />
-            Logout
+            <span className={`mr-2 ${selectedItem === 'Stock Products' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
+            Stock Products
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={() => handleItemClick('Returned Products')}
+            className={`flex items-center text-sm ${
+              selectedItem === 'Returned Products' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
+            }`}
+          >
+            <span className={`mr-2 ${selectedItem === 'Returned Products' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
+            Returned Products
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={() => handleItemClick('Inventory')}
+            className={`flex items-center text-sm ${
+              selectedItem === 'Inventory' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
+            }`}
+          >
+            <span className={`mr-2 ${selectedItem === 'Inventory' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
+            Inventory
           </a>
         </li>
       </ul>
-    </nav>
+    )}
+  </div>
+)}
+
+              </div>
+            );
+          }
+
+          return (
+            <a
+              key={item.name}
+              href={item.href}
+              onClick={() => handleItemClick(item.name)}
+              className={`group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ${
+                item.name === selectedItem
+                  ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]'
+                  : isDisabled
+                  ? 'text-gray-400 cursor-not-allowed'
+                  : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2 '
+              }`}
+            >
+              <item.icon
+                aria-hidden="true"
+                className={`h-6 w-6 shrink-0 ${
+                  item.name === selectedItem
+                    ? 'text-[#0E90DA]'
+                    : isDisabled
+                    ? 'text-gray-400'
+                    : 'text-indigo-200 group-hover:text-white'
+                }`}
+              />
+              {item.name}
+            </a>
+          );
+        })}
+      </nav>
           </div>
         </div>
 
