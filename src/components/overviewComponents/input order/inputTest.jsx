@@ -32,7 +32,7 @@ const InputOrder = () => {
     // Fetch customers
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+            const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
                 params: { email: userEmail },
             });
             setCustomers(response.data.users);
@@ -45,7 +45,7 @@ const InputOrder = () => {
     // Fetch products
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
+            const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}`);
             const data = await response.json();
             if (!data.error) {
                 setTotalProducts(data.totalDrugs);
@@ -132,7 +132,7 @@ const InputOrder = () => {
     
             try {
                 // Make the POST request to your PHP endpoint
-                const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload, {
+                const response = await axios.post('https://raotory.com/apis/create_sale.php', payload, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -170,7 +170,7 @@ const InputOrder = () => {
             };
         
             try {
-                const response = await fetch('https://raotory.com.ng/apis/create_sale.php', {
+                const response = await fetch('https://raotory.com/apis/create_sale.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

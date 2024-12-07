@@ -20,7 +20,7 @@ export default function Example() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://raotory.com.ng/drugs_inventory.php', {
+      const response = await fetch('https://raotory.com/drugs_inventory.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

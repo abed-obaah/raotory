@@ -33,7 +33,7 @@ const EmptyForm = ({ onSuccess }) => {
                 setIsSubmitting(true);
 
                 // Send the form data to the PHP script
-                const response = await axios.post('https://raotory.com.ng/apis/create_customer.php', {
+                const response = await axios.post('https://raotory.com/apis/create_customer.php', {
                     ...formData,
                     created_by: userEmail // Use userEmail from the AuthContext
                 });
@@ -77,14 +77,19 @@ const EmptyForm = ({ onSuccess }) => {
                     value={formData.phone}
                     onChange={handleChange}
                 />
-                <input
-                    type="text"
+               <select
                     name="gender"
                     className="border w-full p-4 rounded-lg"
-                    placeholder="Gender"
                     value={formData.gender}
                     onChange={handleChange}
-                />
+                >
+                    <option value="" disabled>
+                        Select Gender
+                    </option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+
                 <input
                     type="text"
                     name="location"

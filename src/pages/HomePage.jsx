@@ -38,7 +38,7 @@ import StockDrugs from '../components/StockDrugs'
 import Reports from '../components/Reports'
 import Pricing from '../components/pricing'
 import logo from '../assets/Frame.svg'
-import { Field, Label, Switch } from '@headlessui/react'
+
 import { useAuth } from '../context/AuthContext'
 import InputOrder from '../components/overviewComponents/input order/inputOrder'
 import Customer from '../components/overviewComponents/Create Customer/createCustomer'
@@ -53,6 +53,7 @@ import refresh from '../assets/refresh.svg'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Help from '../components/helpCenter'
+import { Field, Label, Switch } from '@headlessui/react'
 
 // const navigation = [
 //   { name: 'Overview', href: '#', icon: HomeIcon, current: true },
@@ -109,7 +110,7 @@ export default function Example() {
     localStorage.removeItem('authToken')
     sessionStorage.clear()
     setOpen(false)
-    navigate('/login') // Redirect to login page
+    navigate('/') // Redirect to login page
   }
 
   const handleItemClick = (item) => {
@@ -316,107 +317,148 @@ export default function Example() {
               {/* <h1 className="text-[24px] font-inter font-bold leading-[29.05px] text-[#008C38]">RAOTory</h1> */}
             </div>
 
-            <nav>
-        {navigation.map((item, index) => {
-          // If the item is 'Products', render the dropdown instead
-          if (item.name === 'Products') {
-            return (
-              <div key={item.name}>
-                {/* Custom Products Dropdown */}
-                {productsOpen && !isDisabled && (
-  <div className="relative">
-    <button
-  onClick={() => setIsOpen(!isOpen)}
-  className={`flex items-center justify-between w-full p-2 rounded ${
-    selectedItem === 'Products'
-      ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]' // Active state
-      : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2' // Default state
-  }`}
->
-  <div className="flex items-center space-x-2">
-    <ClipboardDocumentCheckIcon className="w-6 h-6 text-[#0E90DA]" />
-    <span>Products</span>
-  </div>
-  <ChevronDownIcon
-    className={`w-6 h-6 transition-transform ${isOpen ? 'transform rotate-180' : ''}`}
-  />
-</button>
-
-    {isOpen && (
-      <ul className="pl-4 mt-2 space-y-2">
-        <li>
-          <a
-            href="#"
-            onClick={() => handleItemClick('Stock Products')}
-            className={`flex items-center text-sm ${
-              selectedItem === 'Stock Products' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
-            }`}
-          >
-            <span className={`mr-2 ${selectedItem === 'Stock Products' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
-            Stock Products
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            onClick={() => handleItemClick('Returned Products')}
-            className={`flex items-center text-sm ${
-              selectedItem === 'Returned Products' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
-            }`}
-          >
-            <span className={`mr-2 ${selectedItem === 'Returned Products' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
-            Returned Products
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            onClick={() => handleItemClick('Inventory')}
-            className={`flex items-center text-sm ${
-              selectedItem === 'Inventory' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
-            }`}
-          >
-            <span className={`mr-2 ${selectedItem === 'Inventory' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
-            Inventory
-          </a>
-        </li>
-      </ul>
-    )}
-  </div>
-)}
-
-              </div>
-            );
-          }
-
-          return (
-            <a
-              key={item.name}
-              href={item.href}
-              onClick={() => handleItemClick(item.name)}
-              className={`group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ${
-                item.name === selectedItem
-                  ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]'
-                  : isDisabled
-                  ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2 '
-              }`}
-            >
-              <item.icon
-                aria-hidden="true"
-                className={`h-6 w-6 shrink-0 ${
-                  item.name === selectedItem
-                    ? 'text-[#0E90DA]'
-                    : isDisabled
-                    ? 'text-gray-400'
-                    : 'text-indigo-200 group-hover:text-white'
+            <nav className="flex flex-col h-full">
+  {navigation.map((item, index) => {
+    // If the item is 'Products', render the dropdown instead
+    if (item.name === 'Products') {
+      return (
+        <div key={item.name}>
+          {/* Custom Products Dropdown */}
+          {productsOpen && !isDisabled && (
+            <div className="relative">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`flex items-center justify-between w-full p-2 rounded ${
+                  selectedItem === 'Products'
+                    ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]' // Active state
+                    : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2' // Default state
                 }`}
-              />
-              {item.name}
-            </a>
-          );
-        })}
-      </nav>
+              >
+                <div className="flex items-center space-x-2">
+                  <ClipboardDocumentCheckIcon className="w-6 h-6 text-[#0E90DA]" />
+                  <span>Products</span>
+                </div>
+                <ChevronDownIcon
+                  className={`w-6 h-6 transition-transform ${isOpen ? 'transform rotate-180' : ''}`}
+                />
+              </button>
+
+              {isOpen && (
+                <ul className="pl-4 mt-2 space-y-2">
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => handleItemClick('Stock Products')}
+                      className={`flex items-center text-sm ${
+                        selectedItem === 'Stock Products' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
+                      }`}
+                    >
+                      <span className={`mr-2 ${selectedItem === 'Stock Products' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
+                      Stock Products
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => handleItemClick('Returned Products')}
+                      className={`flex items-center text-sm ${
+                        selectedItem === 'Returned Products' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
+                      }`}
+                    >
+                      <span className={`mr-2 ${selectedItem === 'Returned Products' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
+                      Returned Products
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => handleItemClick('Inventory')}
+                      className={`flex items-center text-sm ${
+                        selectedItem === 'Inventory' ? 'text-[#0E90DA] font-bold' : 'text-gray-500'
+                      }`}
+                    >
+                      <span className={`mr-2 ${selectedItem === 'Inventory' ? 'w-2 h-2 bg-[#0E90DA] rounded-full' : 'w-2 h-2 bg-gray-300 rounded-full'}`}></span>
+                      Inventory
+                    </a>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <a
+        key={item.name}
+        href={item.href}
+        onClick={() => handleItemClick(item.name)}
+        className={`group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ${
+          item.name === selectedItem
+            ? 'bg-[#fff] text-[#0E90DA] py-2 border-l-4 border-l-[#0E90DA]'
+            : isDisabled
+            ? 'text-gray-400 cursor-not-allowed'
+            : 'text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA] hover:py-2 '
+        }`}
+      >
+        <item.icon
+          aria-hidden="true"
+          className={`h-6 w-6 shrink-0 ${
+            item.name === selectedItem
+              ? 'text-[#0E90DA]'
+              : isDisabled
+              ? 'text-gray-400'
+              : 'text-indigo-200 group-hover:text-white'
+          }`}
+        />
+        {item.name}
+      </a>
+    );
+  })}
+
+
+
+  {/* Log Out Button */}
+  <div className="">
+  <div className="flex items-center space-x-4 mt-[28rem]">
+  {/* Label should be inside a proper form-related parent */}
+  <Field name="darkMode" disabled>
+    {({ checked, handleChange }) => (
+      <div className="flex items-center space-x-4">
+        {/* Label for the Dark Mode text */}
+        <Label className="text-indigo-200">Dark Mode</Label>
+
+        {/* Switch */}
+        <Switch
+          checked={enabled}
+          onChange={setEnabled}
+          disabled
+          className={`${
+            enabled ? 'bg-[#0E90DA]' : 'bg-gray-300'
+          } relative inline-flex h-6 w-12 items-center rounded-full`}
+        >
+          <span
+            className={`${
+              enabled ? 'translate-x-6' : 'translate-x-1'
+            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+          />
+        </Switch>
+      </div>
+    )}
+  </Field>
+</div>
+  </div>
+  <button
+    onClick={() => setOpen(true)}
+    className=" flex items-center justify-between w-full p-2 rounded text-indigo-200 hover:bg-[#F5F6F8] hover:text-[#0E90DA]"
+  >
+    <span className="flex items-center space-x-2">
+      <span>Log Out</span>
+    </span>
+  </button>
+</nav>
+
           </div>
         </div>
 

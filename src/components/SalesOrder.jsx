@@ -12,7 +12,7 @@ export default function Example() {
     // Fetch drug names and retail prices from the PHP script
     const fetchDrugs = async () => {
       try {
-        const response = await fetch('https://raotory.com.ng/fetch-drugs.php');
+        const response = await fetch('https://raotory.com/fetch-drugs.php');
         const data = await response.json();
         setDrugs(data);
       } catch (error) {
@@ -59,7 +59,7 @@ export default function Example() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://raotory.com.ng/submit-order.php', {
+      const response = await fetch('https://raotory.com/submit-order.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

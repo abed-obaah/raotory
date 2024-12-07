@@ -65,7 +65,7 @@ const Form = () => {
 
     //     try {
     //         // Adjusted API endpoint and request payload
-    //         const response = await axios.post("https://raotory.com.ng/apis/addDrug.php", { drugs: selectedProducts });
+    //         const response = await axios.post("https://raotory.com/apis/addDrug.php", { drugs: selectedProducts });
     //         console.log(response.data);
 
     //         alert(response.data.message || "Products successfully stocked up!");
@@ -87,7 +87,7 @@ const Form = () => {
     
         try {
             // Adjusted API endpoint and request payload
-            const response = await axios.post("https://raotory.com.ng/apis/addDrug.php", { drugs: selectedProducts });
+            const response = await axios.post("https://raotory.com/apis/addDrug.php", { drugs: selectedProducts });
             console.log(response.data);
             
             // Show success toast on successful stocking up

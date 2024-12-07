@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { TrashIcon,XMarkIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from 'react-toastify';  // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; 
@@ -36,6 +36,8 @@ const ProductSearchComponent = ({
   handleSelectChange,
   selectedProduct,  // Add selectedProduct as a prop
   setSelectedProduct ,
+  selectedPriceType,
+   handlePriceTypeChange
   
 }) => {
 
@@ -48,11 +50,22 @@ const ProductSearchComponent = ({
   // const [totalPrice, setTotalPrice] = useState('');
 
 
+
+  // TODO 
+  // ADD THE PRICE INT THE SELECT DROPDOWN
+
   const productOptions = products.map((product) => ({
     value: product.id,
     label: product.product_name,
+    
   }));
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (selectedCustomer) {
+      setShowDropdown(false); // Close dropdown when a customer is selected
+    }
+  }, [selectedCustomer]);
 
   return (
     <div>
@@ -88,6 +101,7 @@ const ProductSearchComponent = ({
                                   setSelectedCustomer(customer.name);
                                   setSearchTerm('');
                                   setShowDropdown(false);
+                                  
                                 }}
                               >
                                 {customer.name}
@@ -214,6 +228,7 @@ const ProductSearchComponent = ({
                 className="h-5 border p-7 w-2/4 rounded-lg"
                 readOnly
               /> */}
+              
           </div>
         
           <button
@@ -222,48 +237,79 @@ const ProductSearchComponent = ({
             >
               Add Product
           </button>
+          
+          
         </div>
+        <div className="w-1/4 ml-auto">
+      <label htmlFor="location" className="block text-sm/6 font-medium text-gray-900">
+        Price Type
+      </label>
+      <select
+        id="location"
+        name="location"
+        value={selectedPriceType} // Controlled select input
+        onChange={(e) => handlePriceTypeChange(e.target.value)} // Call the handler when price type changes
+        className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6"
+      >
+        <option value="retail_price">Retail price</option>
+        <option value="wholesale_price">Wholesale</option>
+      </select>
+    </div>
+
         <div className="mt-9">
-          <table className="w-full">
-            <thead className="bg-customColor text-white h-12">
-              <tr>
-                <th>N/O</th>
-                <th>Product Name</th>
-                <th>Cost Price</th>
-                <th>Selling Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {addedProducts.map((product, index) => (
-                <tr key={index} className="border text-gray-400">
-                  <td>{index + 1}</td>
-                  <td>{product.product_name}</td>
-                  <td>{product.purchase_price}s</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={product.retail_price}
-                      onChange={(e) => handleSellingPriceChange(index, parseInt(e.target.value) || 0)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={product.quantity}
-                      onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 1)}
-                    />
-                  </td>
-                  <td>NGNs{product.retail_price * product.quantity}</td>
-                </tr>
-              ))}
-              <tr>
-                <td colSpan="5">Total</td>
-                <td>NGN {grandTotal}</td>
-              </tr>
-            </tbody>
-          </table>
+        <table className="w-full border-collapse">
+  <thead className="bg-customColor text-white h-12">
+    <tr>
+      <th className="text-left px-4 py-2">N/O</th>
+      <th className="text-left px-4 py-2">Product Name</th>
+      <th className="text-left px-4 py-2">Cost Price</th>
+      <th className="text-left px-4 py-2">Selling Price</th>
+      <th className="text-left px-4 py-2">Quantity</th>
+      <th className="text-left px-4 py-2">Total</th>
+      <th className="text-left px-4 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {addedProducts.map((product, index) => (
+      <tr key={index} className="border-b">
+        <td className="px-4 py-2">{index + 1}</td>
+        <td className="px-4 py-2">{product.product_name}</td>
+        <td className="px-4 py-2">NGN {product.purchase_price}</td>
+        <td className="px-4 py-2">
+          <input
+            type="number"
+            value={product.retail_price}
+            onChange={(e) => handleSellingPriceChange(index, parseInt(e.target.value) || 0)}
+            className="w-20 border border-gray-300 rounded px-2 py-1 text-gray-700"
+          />
+        </td>
+        <td className="px-4 py-2">
+          <input
+            type="number"
+            value={product.quantity}
+            onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 1)}
+            className="w-20 border border-gray-300 rounded px-2 py-1 text-gray-700"
+          />
+        </td>
+        <td className="px-4 py-2">NGN {product.retail_price * product.quantity}</td>
+        <td className="px-4 py-2">
+          <div
+            className="bg-red-100 hover:bg-red-200 p-2 rounded-full cursor-pointer inline-flex items-center justify-center"
+            onClick={() => handleRemoveProduct(index)}
+          >
+            <TrashIcon height="20px" color="red" />
+          </div>
+        </td>
+      </tr>
+    ))}
+    <tr className="bg-gray-100">
+      <td colSpan="5" className="text-right font-semibold px-4 py-2">Grand Total:</td>
+      <td className="font-bold px-4 py-2">NGN {grandTotal}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
         </div>
         <div className="mt-4">
           <label htmlFor="paymentType">Payment Type</label>

@@ -25,7 +25,7 @@ export default function Example() {
   // Fetch customers from the API
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+      const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
         params: { email: userEmail },
       })
       console.log("response:",response)
@@ -43,7 +43,7 @@ export default function Example() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
+        const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}`);
         const data = await response.json();
         if (!data.error) {
           setProducts(data.drugs); // Store the fetched products in the state

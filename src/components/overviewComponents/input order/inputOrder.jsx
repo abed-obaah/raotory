@@ -3,7 +3,7 @@ import { Listbox, ListboxButton, ListboxOption, ListboxOptions,Label } from '@he
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import axios from 'axios';
 import { useAuth } from '../../../context/AuthContext'; 
-import { TrashIcon,XMarkIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { TrashIcon,XMarkIcon, UserPlusIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from 'react-toastify';  // Import toast components
 import 'react-toastify/dist/ReactToastify.css';  // Import toast styles
 // import { useState } from 'react'
@@ -13,6 +13,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import VectorBG from '../../../../src/assets/Vector18.svg';
 import HeadImage from '../../../../src/assets/imager.svg';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -32,6 +33,7 @@ const people = [
 
 
 export default function Example() {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(null); // Set selected customer
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
   const [customers, setCustomers] = useState([]); // Fetched customers
@@ -59,6 +61,12 @@ export default function Example() {
   // const [products, setProducts] = useState([]); // State to hold the fetched products
   // const [selectedProduct, setSelectedProduct] = useState(''); // State for selected product
   const [showDropdownP, setShowDropdownP] = useState(false);
+  const [selectedPriceType, setSelectedPriceType] = useState('retail_price'); // Default price type
+
+  // Function to handle price type change
+  const handlePriceTypeChange = (newPriceType) => {
+    setSelectedPriceType(newPriceType); // Update the selected price type
+  };
 
   const handlePayments = () => {
     setIsPaymentMade(true); // Toggle the component
@@ -91,7 +99,7 @@ export default function Example() {
   // Fetch customers from the API
   // const fetchCustomers = async () => {
   //   try {
-  //     const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+  //     const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
   //       params: { email: userEmail },
   //     })
   //     console.log("response:", response);
@@ -112,7 +120,7 @@ export default function Example() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+      const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
         params: { email: userEmail }, // Assume userEmail is defined
       });
       console.log('response:', response);
@@ -154,7 +162,7 @@ export default function Example() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
+        const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}`);
         const data = await response.json();
         console.log("itesm",data)
         if (!data.error) {
@@ -281,7 +289,7 @@ export default function Example() {
   const handleAddProduct = () => {
     if (selectedProduct && quantity > 0) {
       // Use the selected price type (retail or wholesale)
-      const priceToUse = selecteds.value === 'retail_price' ? selectedProduct.retail_price : selectedProduct.wholesale_price;
+      const priceToUse = selectedPriceType === 'retail_price' ? selectedProduct.retail_price : selectedProduct.wholesale_price;
   
       const productWithQuantity = {
         ...selectedProduct,
@@ -301,6 +309,7 @@ export default function Example() {
       setQuantity(1);
     }
   };
+  
 
   const handleSellingPriceChange = (index, newPrice) => {
     // Create a copy of the added products
@@ -370,7 +379,7 @@ export default function Example() {
 //   console.log("Payload to send:", payload);  // Log the payload
 
 //   try {
-//       const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
+//       const response = await axios.post('https://raotory.com/apis/create_sale.php', payload);
 //       console.log("Payment response:", response.data);
 
 //       // Show a success toast when payment is successful
@@ -408,7 +417,7 @@ const handlePayment = async () => {
   console.log("Payload to send:", payload);  // Log the payload for debugging
 
   try {
-    const response = await axios.post('https://raotory.com.ng/apis/create_sale.php', payload);
+    const response = await axios.post('https://raotory.com/apis/create_sale.php', payload);
     console.log("Payment response:", response.data);
 
     // Show a success toast when payment is successful
@@ -429,7 +438,7 @@ const handlePayment = async () => {
 
 const handleIssueInvoice = async () => {
   try {
-    const response = await fetch("https://raotory.com.ng/apis/issueInvoice.php", {
+    const response = await fetch("https://raotory.com/apis/issueInvoice.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -540,6 +549,15 @@ const handleQuantityChange = (index, newQuantity) => {
     const selectedOption = people.find(person => person.id === selectedId);
     setSelecteds(selectedOption);
   };
+
+
+
+  const handleBack = () => {
+    setIsInvoiceIssued(false);  // Reset to show "Make Payment"
+    setIsPaymentMade(false);      // Keep the payment made status
+  };
+
+
 
 
   return (
@@ -855,7 +873,7 @@ const handleQuantityChange = (index, newQuantity) => {
 //     </div>
 
 <div>
-{/* ProductSearchComponent - Show when payment has not been made */}
+
 {!isPaymentMade ? (
   <ProductSearchComponent
     selectedCustomer={selectedCustomer}
@@ -885,24 +903,13 @@ const handleQuantityChange = (index, newQuantity) => {
     handlePayment={handlePayment}
     people={[]} // Example prop for select input if needed
     handleSelectChange={handleSelectChange}
+    selectedPriceType={selectedPriceType} // The current price type
+    handlePriceTypeChange={handlePriceTypeChange}
   />
 ) : isInvoiceIssued ? (
-  /* If invoice is issued, display this section */
-  // <div className="bg-green-100 p-4 rounded">
-  //   <h2 className="text-xl font-bold">Payment Successful</h2>
-  //   <p>Customer: {selectedCustomer}</p>
-  //   <p>Grand Total: {grandTotal}</p>
-  //   <p>Payment Type: {selectedPaymentType}</p>
-  //   <h3 className="font-semibold">Products:</h3>
-  //   <ul>
-  //     {addedProducts.map((product, index) => (
-  //       <li key={index}>
-  //         {product.product_name} - Quantity: {product.quantity} - Price: {product.price}
-  //       </li>
-  //     ))}
-  //   </ul>
-  // </div>
+ 
   <div>
+
 
           <div className="bg-[#0E90DA] relative justify-between align-center overflow-hidden w-full h-full rounded-lg p-7 text-white bg-right bg-no-repeat" style={{ backgroundImage: `url(${VectorBG})` }}>
                             <h1 className="text-2xl">{selectedCustomer}</h1>
@@ -920,6 +927,16 @@ const handleQuantityChange = (index, newQuantity) => {
                                       </div>
                                     </div>
           </div>
+          {isInvoiceIssued && (
+                <div
+                onClick={handleBack}  // Go back to the "Make Payment" state
+                className="flex items-center justify-center w-[40px] h-[40px] bg-[#0E90DA] rounded-full text-white border-2 cursor-pointer"
+              >
+                <ArrowLeftIcon height={20} color="white" />
+              </div>
+              
+              )}
+          
 
 
               <table className="mt-9">
@@ -1039,27 +1056,6 @@ const handleQuantityChange = (index, newQuantity) => {
 
 </div>
 )}
-
-{/* Button to toggle between Make Payment and Issue Invoice */}
-{/* <button
-  onClick={
-    !isPaymentMade
-      ? handlePayments
-      : isInvoiceIssued
-      ? () => {} 
-      : handleIssueInvoice 
-  }
-  className={`bg-[#0E90DA] flex ${
-    isInvoiceIssued ? 'w-[15%] justify-start' : 'w-full justify-center'
-  } rounded-md px-10 py-4 text-lg font-semibold leading-6 text-white mt-10`}
->
-
-  {!isPaymentMade
-    ? 'Make Payment'
-    : isInvoiceIssued
-    ? 'Print Invoice'
-    : 'Issue Invoice'}
-</button> */}
 
 <button
   onClick={

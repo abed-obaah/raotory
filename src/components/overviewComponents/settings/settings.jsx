@@ -25,7 +25,7 @@ const Settings = () => {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`https://raotory.com.ng/apis/get_user.php?user_email=${userEmail}`); // Updated endpoint
+                const response = await fetch(`https://raotory.com/apis/get_user.php?user_email=${userEmail}`); // Updated endpoint
                 const data = await response.json();
                 
                 if (!data.error) {

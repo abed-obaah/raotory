@@ -8,7 +8,7 @@ const Profits = () => {
   // Function to fetch profits
   const fetchProfits = async () => {
     try {
-      const response = await axios.get("https://raotory.com.ng/get_profits.php");
+      const response = await axios.get("https://raotory.com/get_profits.php");
       const uniqueProfits = response.data.reduce((acc, current) => {
         const x = acc.find(item => item.drug_name === current.drug_name && item.cost_of_drug === current.cost_of_drug);
         if (!x) {
@@ -28,7 +28,7 @@ const Profits = () => {
   const calculateProfits = async () => {
     setLoading(true);
     try {
-      await axios.get("https://raotory.com.ng/calculate_profits.php");
+      await axios.get("https://raotory.com/calculate_profits.php");
       // After calculating profits, fetch updated data
       await fetchProfits();
     } catch (error) {

@@ -23,7 +23,7 @@ export default function Example() {
     }
 
     try {
-      const response = await axios.post('https://raotory.com.ng/apis/register.php', {
+      const response = await axios.post('https://raotory.com/apis/register.php', {
         full_name: fullName,
         email,
         password,
@@ -172,7 +172,7 @@ export default function Example() {
           <p className="mt-10 text-center text-sm text-gray-500">
             Already registered?
             <a
-              href="/login"
+              href="/"
               className="pl-1 font-semibold leading-6 text-[#0E90DA] hover:text-indigo-500"
             >
               Login

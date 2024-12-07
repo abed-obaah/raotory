@@ -28,7 +28,7 @@ const Invoice = () => {
     const All = () => {
         return (
             <>
-                <div className="bg-blue-500 relative justify-between align-center overflow-hidden w-full h-full rounded-lg p-7 text-white bg-right bg-no-repeat" style={{ backgroundImage: `url(${VectorBG})` }}>
+                {/* <div className="bg-blue-500 relative justify-between align-center overflow-hidden w-full h-full rounded-lg p-7 text-white bg-right bg-no-repeat" style={{ backgroundImage: `url(${VectorBG})` }}>
                     <h1 className="text-2xl pb-7">All Invoices for {userEmail}</h1>
                     <form className="flex gap-3 text-gray-400-500">
                         <div className="item">
@@ -50,7 +50,7 @@ const Invoice = () => {
                         </div>
                     </form>
                     <img src={HeadImage} alt="" className="absolute right-9 top-6" />
-                </div>
+                </div> */}
                 
                 <Table 
                     tab={tab} 

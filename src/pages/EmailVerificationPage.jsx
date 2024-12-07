@@ -15,7 +15,7 @@ export default function Example() {
     if (isButtonActive) {
       try {
         // Make API request to verify OTP
-        const response = await axios.post('https://raotory.com.ng/apis/verify_otp.php', { email, otp });
+        const response = await axios.post('https://raotory.com/apis/verify_otp.php', { email, otp });
         console.log("otp verification:",response)
         navigate('/login');
         if (response.data.success) {
@@ -31,10 +31,10 @@ export default function Example() {
   };
 
   // Handle the skip button click
-  const handleSkip = () => {
-    // Navigate to the login screen or any other screen you want
-    navigate('/login'); // Adjust the path as needed
-  };
+  // const handleSkip = () => {
+  //   // Navigate to the login screen or any other screen you want
+  //   navigate('/login'); // Adjust the path as needed
+  // };
 
   return (
     <>
@@ -76,13 +76,13 @@ export default function Example() {
               </button>
 
               {/* Skip Button */}
-              <button
+              {/* <button
                 type="button" // Type set to button to prevent default form submission
                 onClick={handleSkip} // Call handleSkip when button is clicked
                 className="mt-4 flex w-full justify-center rounded-md px-10 py-4 text-sm font-semibold leading-6 text-white bg-gray-500 hover:bg-gray-600"
               >
                 Skip
-              </button>
+              </button> */}
             </div>
           </form>
         </div>

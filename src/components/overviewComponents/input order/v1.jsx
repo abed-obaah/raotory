@@ -31,7 +31,7 @@ const InputOrder = () => {
     // Fetch customers
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+            const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
                 params: { email: userEmail },
             });
             setCustomers(response.data.users);
@@ -44,7 +44,7 @@ const InputOrder = () => {
     // Fetch products
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
+            const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}`);
             const data = await response.json();
             if (!data.error) {
                 setTotalProducts(data.totalDrugs);

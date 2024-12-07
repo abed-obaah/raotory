@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '../../../context/AuthContext';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import VectorBG from '../../../../src/assets/Vector18.svg';
+import HeadImage from '../../../../src/assets/imager.svg';
 
 const Table = ({ tab, setTab, setSelectedInvoice }) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const itemsPerPage = 5; // Limit to 5 items per page
+    const [beginDate, setBeginDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [status, setStatus] = useState('Any');
+    const itemsPerPage = 5;
     const { user } = useAuth();
     const userEmail = user?.email;
-    const thead = ['Customer Names', 'Invoice Number', 'Product Name', 'Sales Type', 'Status'];
-    const [selectedRows, setSelectedRows] = useState([]);
 
     useEffect(() => {
         const fetchInvoices = async () => {
@@ -19,13 +22,12 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                 return; 
             }
             try {
-                const response = await fetch(`https://raotory.com.ng/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
+                const response = await fetch(`https://raotory.com/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                
                 const data = await response.json();
-                console.log("invoice for user:",data)
                 if (data.success) {
                     const formattedInvoices = data.invoices.map(invoice => ({
                         id: invoice.id,
@@ -63,34 +65,28 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
     };
 
     const handleClick = (invoice) => {
-        console.log('Selected Invoice:', invoice);
         setSelectedInvoice(invoice);
         setTab('Data');
     };
 
-    const Type = (status) => {
-        let bgColor;
-        if (status === "Paid") {
-            bgColor = "bg-green-200";
-        } else if (status === 'Credit') {
-            bgColor = "bg-red-200";
-        } else if (status === 'Part') {
-            bgColor = "bg-yellow-100";
-        } else {
-            bgColor = "bg-gray-200";
-        }
-
-        return (
-            <td className={`h-1/2 mt-1 py-1 flex justify-center align-center rounded-full w-full ${bgColor}`}>
-                {status}
-            </td>
-        );
-    };
-
-    // Filter invoices based on search term
-    const filteredInvoices = invoices.filter(invoice =>
-        invoice.customer.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Filter invoices based on search term, date, and status
+    const filteredInvoices = invoices.filter((invoice) => {
+        // Check if the search term matches the customer name (case-insensitive)
+        const matchesSearch = invoice.customer.toLowerCase().includes(searchTerm.toLowerCase());
+        
+        // Check if the status matches or if "Any" is selected
+        const matchesStatus = status === 'Any' || invoice.status === status;
+        
+        // Check if the invoice date falls within the selected date range
+        const invoiceDate = new Date(invoice.date);
+        const matchesDate =
+            (!beginDate || invoiceDate >= new Date(beginDate)) &&
+            (!endDate || invoiceDate <= new Date(endDate));
+    
+        // Return true if all conditions are met
+        return matchesSearch && matchesStatus && matchesDate;
+    });
+    
 
     const indexOfLastInvoice = currentPage * itemsPerPage;
     const indexOfFirstInvoice = indexOfLastInvoice - itemsPerPage;
@@ -98,7 +94,51 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
 
     return (
         <>
-            <div className="container mx-auto p-6 ">
+            <div className="container mx-auto p-6">
+                <div
+                    className="bg-blue-500 relative justify-between align-center overflow-hidden w-full h-full rounded-lg p-7 text-white bg-right bg-no-repeat"
+                    style={{ backgroundImage: `url(${VectorBG})` }}
+                >
+                    <h1 className="text-2xl pb-7">All Invoices for {userEmail}</h1>
+                    <form className="flex gap-3 text-gray-400-500">
+                        <div className="item">
+                            <label htmlFor="begin-date">Begin Date</label><br />
+                            <input
+                                type="date"
+                                id="begin-date"
+                                className="border rounded text-gray-400"
+                                value={beginDate}
+                                onChange={(e) => setBeginDate(e.target.value)}
+                            />
+                        </div>
+                        <div className="item">
+                            <label htmlFor="end-date">End Date</label><br />
+                            <input
+                                type="date"
+                                id="end-date"
+                                className="border rounded text-gray-400"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
+                        </div>
+                        <div className="item">
+                            <label htmlFor="status">Status</label><br />
+                            <select
+                                id="status"
+                                className="border rounded text-gray-400"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+                                <option value="Any">Any</option>
+                                <option value="Complete">completed</option>
+                                <option value="Credit">credit</option>
+                                <option value="Part">part Payment</option>
+                            </select>
+                        </div>
+                    </form>
+                    <img src={HeadImage} alt="" className="absolute right-9 top-6" />
+                </div>
+
                 <div className="flex items-center mt-5">
                     <MagnifyingGlassIcon className="h-5 w-5 text-gray-500 absolute ml-2" />
                     <input
@@ -110,7 +150,8 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                         style={{ backgroundColor: 'white', color: 'black' }}
                     />
                 </div>
-                {/* Header Section */}
+
+                {/* Table Header */}
                 <div className="table-header flex p-3 font-semibold text-gray-500">
                     <div className="w-1/4">Customer Name</div>
                     <div className="w-1/4">Invoice Number</div>
@@ -122,9 +163,9 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                     </div>
                 </div>
 
-                {/* Invoice Rows */}
+                {/* Table Rows */}
                 {currentInvoices.map(invoice => (
-                    <div key={invoice.id} className="invoice-row flex items-center p-3 border-2 mb-5 rounded-lg border-gray-200 bo">
+                    <div key={invoice.id} className="invoice-row flex items-center p-3 border-2 mb-5 rounded-lg border-gray-200">
                         <div className="w-1/4 flex items-center">
                             <div className="avatar w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold">
                                 {invoice.customer[0]}
@@ -141,36 +182,34 @@ const Table = ({ tab, setTab, setSelectedInvoice }) => {
                             }`}>
                                 {invoice.status}
                             </span>
-                            <span className="status-badge px-3 py-1 rounded-full bg-green-100 text-green-600
-                               
-                            ">
-                                Paid
-                            </span>
-                            <button className="view-btn bg-blue-500 text-white px-4 py-2 rounded-lg" onClick={() => handleClick(invoice)}>
+                            <button
+                                className="view-btn bg-blue-500 text-white px-4 py-2 rounded-lg"
+                                onClick={() => handleClick(invoice)}
+                            >
                                 View
                             </button>
                         </div>
                     </div>
                 ))}
-            </div>
 
-            {/* Pagination controls */}
-            <div className="flex justify-between mt-4">
-                <button 
-                    className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <span className="px-4 py-2">{`Page ${currentPage} of ${Math.ceil(filteredInvoices.length / itemsPerPage)}`}</span>
-                <button 
-                    className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${currentPage === Math.ceil(filteredInvoices.length / itemsPerPage) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    onClick={handleNextPage}
-                    disabled={currentPage === Math.ceil(filteredInvoices.length / itemsPerPage)}
-                >
-                    Next
-                </button>
+                {/* Pagination */}
+                <div className="flex justify-between mt-4">
+                    <button
+                        className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <span className="px-4 py-2">{`Page ${currentPage} of ${Math.ceil(filteredInvoices.length / itemsPerPage)}`}</span>
+                    <button
+                        className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${currentPage === Math.ceil(filteredInvoices.length / itemsPerPage) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        onClick={handleNextPage}
+                        disabled={currentPage === Math.ceil(filteredInvoices.length / itemsPerPage)}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </>
     );

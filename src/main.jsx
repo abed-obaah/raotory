@@ -8,9 +8,7 @@ import { AuthProvider } from './context/AuthContext'; // Import your AuthProvide
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-     
         <App />
-     
     </AuthProvider>
   </StrictMode>
 );

@@ -74,7 +74,7 @@ const Donate = ({ price }) => {
   //   text: "Pay Now",
   //   onSuccess: async () => {
   //     // Call the PHP script to store the payment information
-  //     const response = await fetch('https://raotory.com.ng/apis/store_payment.php', { // Update with your PHP script path
+  //     const response = await fetch('https://raotory.com/apis/store_payment.php', { // Update with your PHP script path
   //       method: 'POST',
   //       headers: {
   //         'Content-Type': 'application/x-www-form-urlencoded',
@@ -105,7 +105,7 @@ const Donate = ({ price }) => {
     text: "Pay Now",
     onSuccess: async () => {
       // First call to the PHP script to store the payment information
-      const response = await fetch('https://raotory.com.ng/apis/store_payment.php', {
+      const response = await fetch('https://raotory.com/apis/store_payment.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Sending JSON data
@@ -124,7 +124,7 @@ const Donate = ({ price }) => {
         alert(data.message); // Notify the user
   
         // Second call to update the paid_status in the database
-        const updateStatusResponse = await fetch('https://raotory.com.ng/apis/updatePaidStatus.php', {
+        const updateStatusResponse = await fetch('https://raotory.com/apis/updatePaidStatus.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Ensure correct headers

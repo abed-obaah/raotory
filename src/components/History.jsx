@@ -10,7 +10,7 @@ export default function Example() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://raotory.com.ng/fetch_orders.php');
+        const response = await fetch('https://raotory.com/fetch_orders.php');
         const data = await response.json();
         if (data.success) {
           setOrders(data.orders);

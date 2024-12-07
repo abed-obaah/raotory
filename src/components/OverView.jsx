@@ -30,7 +30,7 @@ export default function Example() {
       if (!userEmail) return; // Early return if userEmail is not available
     
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}&date=${formatDate(new Date())}`);
+        const response = await fetch(`https://raotory.com/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}&date=${formatDate(new Date())}`);
         const data = await response.json();
     
         console.log('API Response:', data); // Log the entire response data for debugging
@@ -51,7 +51,7 @@ export default function Example() {
     const fetchInvoices = async () => {
       if (!userEmail) return; 
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
+        const response = await fetch(`https://raotory.com/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
         const data = await response.json();
     
         if (data.success) {

@@ -16,7 +16,7 @@ const Table = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+            const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
                 params: { email: user?.email },
             });
             setCustomers(response.data.users);
@@ -29,7 +29,7 @@ const Table = () => {
 
     // const deleteCustomer = async (id) => {
     //     try {
-    //         await axios.delete(`https://raotory.com.ng/apis/delete_user.php?id=${id}`);
+    //         await axios.delete(`https://raotory.com/apis/delete_user.php?id=${id}`);
     //         fetchCustomers();
     //     } catch (err) {
     //         console.error(err);
@@ -39,7 +39,7 @@ const Table = () => {
 
     const deleteCustomer = async (id) => {
         try {
-          await axios.delete(`https://raotory.com.ng/apis/delete_user.php?id=${id}`);
+          await axios.delete(`https://raotory.com/apis/delete_user.php?id=${id}`);
           fetchCustomers();
           toast.success('Customer deleted successfully!'); // Show success toast on customer deletion
         } catch (err) {
@@ -54,7 +54,7 @@ const Table = () => {
 
     const updateCustomer = async () => {
         try {
-            const response = await axios.put('https://raotory.com.ng/apis/update_user.php', selectedCustomer);
+            const response = await axios.put('https://raotory.com/apis/update_user.php', selectedCustomer);
             console.log(response.data);  // Log the full response
             if (response.data.message) {
                 alert(response.data.message); // Show a success message

@@ -42,7 +42,7 @@ export default function Example() {
     // Fetch data from the PHP script
     const fetchData = async () => {
       try {
-        const response = await fetch('https://raotory.com.ng/fetch_drugs.php');
+        const response = await fetch('https://raotory.com/fetch_drugs.php');
         const data = await response.json();
         setPeople(data);
       } catch (error) {
@@ -90,7 +90,7 @@ export default function Example() {
     try {
       await Promise.all(
         Array.from(selectedItems).map(id =>
-          fetch('https://raotory.com.ng/delete_drug.php', {
+          fetch('https://raotory.com/delete_drug.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
@@ -120,7 +120,7 @@ export default function Example() {
   const confirmDeleteItem = async () => {
     if (deletingItemId) {
       try {
-        const response = await fetch('https://raotory.com.ng/delete_drug.php', {
+        const response = await fetch('https://raotory.com/delete_drug.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: deletingItemId })

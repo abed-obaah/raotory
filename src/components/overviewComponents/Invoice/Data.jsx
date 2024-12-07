@@ -50,7 +50,7 @@ const Data = ({ tab, setTab, products, selectedCount, selectedRows, setSelectedC
                 });
     
                 // Send the POST request to the backend
-                const response = await axios.post('https://raotory.com.ng/apis/refund.php', refundRequests);
+                const response = await axios.post('https://raotory.com/apis/refund.php', refundRequests);
     
                 // Display the response message in a success toast
                 const responseMessage = response.data.message || 'Refund processed successfully!';

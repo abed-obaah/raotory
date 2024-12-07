@@ -19,7 +19,7 @@ const InvoiceTable = () => {
     const fetchInvoices = async () => {
       if (!userEmail) return; 
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
+        const response = await fetch(`https://raotory.com/apis/invoice.php?user_email=${encodeURIComponent(userEmail)}`);
         const data = await response.json();
     
         if (data.success) {
@@ -45,7 +45,7 @@ const InvoiceTable = () => {
 
     const fetchSalesData = async () => {
       try {
-        const response = await fetch(`https://raotory.com.ng/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}`);
+        const response = await fetch(`https://raotory.com/apis/get_sales_count.php?email=${encodeURIComponent(userEmail)}`);
         const data = await response.json();
 
         console.log(data);
@@ -74,7 +74,7 @@ const InvoiceTable = () => {
       if (!userEmail) return;
     
       try {
-        const response = await fetch("https://raotory.com.ng/apis/stock_alert.php", {
+        const response = await fetch("https://raotory.com/apis/stock_alert.php", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

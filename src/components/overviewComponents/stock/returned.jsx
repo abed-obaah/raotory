@@ -18,7 +18,7 @@ const Table = () => {
     const fetchRefunds = async () => {
         try {
             // Replace with your actual API URL and send userEmail to the API
-            const response = await axios.post('https://raotory.com.ng/apis/get_refunds.php', { store_email: userEmail,user_email: userEmail});
+            const response = await axios.post('https://raotory.com/apis/get_refunds.php', { store_email: userEmail,user_email: userEmail});
             
             if (response.data.length === 0) {
                 // No refunds found for this email

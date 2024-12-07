@@ -33,7 +33,7 @@ export default function Example() {
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           <div>
             <h2 className="mt-6 text-2xl leading-8 text-gray-600 italic font-semibold">Features</h2>
-            <p className="mt-2 text-3xl font-normal tracking-tight text-gray-900 sm:text-4xl">Why manage your inventory with RaoTory.com.ng?</p>
+            <p className="mt-2 text-3xl font-normal tracking-tight text-gray-900 sm:text-4xl">Why manage your inventory with raotory.com?</p>
             <p className="mt-6 text-base leading-7 text-gray-600">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste
               dolor cupiditate blanditiis ratione.

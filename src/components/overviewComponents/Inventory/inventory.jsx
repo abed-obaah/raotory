@@ -12,15 +12,18 @@ const InventoryPage = () => {
     useEffect(() => {
         // Fetch total products and products
         const fetchProducts = async () => {
-            const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
+            const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}`);
             const data = await response.json();
 
-            // Log the response
+            // Log the response to inspect the structure of the data
             console.log("API Response:", data);
 
-            if (!data.error) {
+            if (data && !data.error && Array.isArray(data.drugs)) {
                 setTotalProducts(data.totalDrugs);
                 setProducts(data.drugs);
+            } else {
+                console.error("Invalid data structure:", data);
+                // Handle invalid data structure if necessary
             }
         };
 
@@ -29,16 +32,22 @@ const InventoryPage = () => {
 
     // Search function
     const handleSearch = async () => {
-        const response = await fetch("https://raotory.com.ng/apis/inventory.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ action: 'search', email: userEmail, searchTerm }),
+        // Modify the URL to include search term as a query parameter
+        const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}&action=search&searchTerm=${searchTerm}`, {
+            method: "GET", // Change method to GET
         });
         const data = await response.json();
-        setProducts(data);
+    
+        // Log the search response to inspect the data structure
+        console.log("Search API Response:", data);
+    
+        if (data && Array.isArray(data)) {
+            setProducts(data);
+        } else {
+            console.error("Invalid search response format:", data);
+        }
     };
+    
 
     return (
         <>
@@ -47,7 +56,7 @@ const InventoryPage = () => {
                     <h2 className="text-sm">Total Product</h2>
                     <p className="text-4xl">{totalProducts}</p>
                 </div>
-                <input 
+                {/* <input 
                     type="text" 
                     className="w-3/4 border rounded-lg px-6" 
                     style={{ height: '45px' }} 
@@ -55,8 +64,9 @@ const InventoryPage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()} // Trigger search on Enter
-                />
+                /> */}
             </div>
+            {/* Pass the products array to Tables component */}
             <Tables products={products} userEmail={userEmail} />
         </>
     );

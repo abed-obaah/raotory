@@ -44,7 +44,7 @@ const InputOrder = () => {
     // Fetch customers
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('https://raotory.com.ng/apis/fetch_users.php', {
+            const response = await axios.get('https://raotory.com/apis/fetch_users.php', {
                 params: { email: userEmail },
             });
             setCustomers(response.data.users);
@@ -57,7 +57,7 @@ const InputOrder = () => {
     // Fetch products
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch(`https://raotory.com.ng/apis/inventory.php?email=${userEmail}`);
+            const response = await fetch(`https://raotory.com/apis/inventory.php?email=${userEmail}`);
             const data = await response.json();
             if (!data.error) {
                 setTotalProducts(data.totalDrugs);
@@ -140,7 +140,7 @@ const InputOrder = () => {
         text: " Issue Invoice",
         onSuccess: async () => {
           // Call the PHP script to store the payment information
-        //   const response = await fetch('https://raotory.com.ng/apis/store_payment.php', { // Update with your PHP script path
+        //   const response = await fetch('https://raotory.com/apis/store_payment.php', { // Update with your PHP script path
         //     method: 'POST',
         //     headers: {
         //       'Content-Type': 'application/x-www-form-urlencoded',
